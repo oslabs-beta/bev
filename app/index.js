@@ -12,6 +12,7 @@ const openWindow = () => {
         webPreferences: {
             nodeIntegration: true,
             devTools: true,
+            contextIsolation: false
         },
     } );
 
@@ -52,6 +53,7 @@ ipcMain.handle( 'app:get-folders', () => {
 
 // Open filesystem dialog to choose files
 ipcMain.handle( 'app:on-fs-dialog-open', async ( event ) => {
+    console.log('click handler triggered!')
     const folder = dialog.showOpenDialogSync( {
         properties: [ 'openDirectory', 'multiSelections' ],
     } );
@@ -73,6 +75,7 @@ ipcMain.on( 'app:on-folder-open', ( event, folder ) => {
 
 // Listen to analyze dependencies event
 ipcMain.handle( 'app:on-analyze', ( event, folders ) => {
-	io.generateDependencyObject(folders);
-	return true;
+	const results = io.generateDependencyObject(folders);
+    console.log('RESULTS IN THE BACKEND ', results);
+	return results;
 } );

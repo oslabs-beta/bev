@@ -96,6 +96,7 @@ exports.generateDependencyObject = (folderArr) =>{
 			},
 		},
 	};
+	let json;
 	try {
 		const cruiseResult = cruise(
 			ARRAY_OF_FILES_AND_DIRS_TO_CRUISE,
@@ -103,7 +104,7 @@ exports.generateDependencyObject = (folderArr) =>{
 		);
 
 		console.dir(cruiseResult, { depth: 20 });
-		const json = JSON.stringify(cruiseResult.output);
+		json = JSON.stringify(cruiseResult.output);
 
 		notification.resultsAdded( folderArr.length );
 		
@@ -112,4 +113,7 @@ exports.generateDependencyObject = (folderArr) =>{
 	} catch (error) {
 		console.error(error);
 	}
+	console.log('generated json file from io.js', json);
+	return json;
+
 }

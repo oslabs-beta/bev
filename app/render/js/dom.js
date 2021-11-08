@@ -31,7 +31,12 @@ window.analyzeDep = function () {
 	const folderObjs = Array.from(folderNodes);
 	const folders = folderObjs.map( node => node.getAttribute('data-folderpath'))
 
-	ipcRenderer.invoke( 'app:on-analyze', folders)
+	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
+		//change the value of a dom element.
+		console.log('RESULTS SENT FROM THE BACKEND ', results);
+		const trigger = document.getElementById('trigger');
+		trigger.value = results;
+	});
 };
 
 exports.displayFolders = ( folders = [] ) => {
