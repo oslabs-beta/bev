@@ -1,6 +1,6 @@
 const { Notification } = require( 'electron' );
 
-// display files added notification
+// Display files added notification
 exports.foldersAdded = ( size ) => {
     const notif = new Notification( {
         title: 'Folders added',
@@ -10,11 +10,11 @@ exports.foldersAdded = ( size ) => {
     notif.show();
 };
 
-// display files added notification
+// Display files added notification
 exports.resultsAdded = ( size ) => {
 	const notif = new Notification( {
-			title: 'Analyzed Successful',
-			body: `${ size } folders(s) has been successfully analyzed for dependencies.`
+        title: 'Analyzed Successful',
+        body: `${ size } folders(s) has been successfully analyzed for dependencies.`
 	} );
 
 	notif.show();
