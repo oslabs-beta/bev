@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Bird's Eye View</title><script defer="defer" src="bundle.js"></script></head><body style="padding: 0px;"><div id="app"></div><script defer="defer">document.addEventListener('DOMContentLoaded', () => {
+      require( '../js/renderer.js' );
+      const uploaderButton = document.getElementById('uploader-button');
+      uploaderButton.addEventListener('click', (e)=> {
+        console.log('CLICKED ON BUTTON');
+        openDialog();
+      });
+    });</script></body></html>

@@ -1,0 +1,260 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@500&display=swap');
+
+body {
+	background-color: #eee;
+	font-family: "Lato", sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+}
+
+h1 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+h2 {
+	padding: 0px;
+	margin: 5px;
+}
+
+h3 {
+	font-family: 'Press Start 2P', cursive;
+	font-size: 1.8em;
+	color:rgb(0, 255, 179);
+}
+
+h4 {
+	font-family: 'Press Start 2P', cursive;
+	font-size: 1.5em;
+	color:rgb(0, 255, 179);
+}
+
+h5 {
+	font-family: 'Press Start 2P', cursive;
+	font-size: 1.2em;
+	color:rgb(0, 255, 179);
+}
+
+button {
+	border: none;
+		  outline: none;
+		  padding: 6px 12px;
+		  font-size: 12px;
+		  text-transform: uppercase;
+		  background-color: #d056e6;
+		  color: #fff;
+		  border-radius: 3px;
+		  overflow: hidden;
+		  cursor: pointer; 
+}
+
+button:hover{
+	background-color:rgb(0, 255, 179);
+	color: black;
+}
+
+.button_container{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow: hidden; 
+	padding: 10px;
+}
+
+nav {
+	width: 100%;
+	background:black;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	font-family: 'Roboto', sans-serif;
+	font-weight: bold;
+	top: 0;
+	left: 0;
+	margin: 0;
+}
+
+nav ul{
+	list-style-type: none;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: flex-end;
+}
+
+.title {
+	display: flex;
+	flex-direction: row;
+	font-size: 1.8em;
+	justify-content: flex-start;
+	font-family: 'Birthstone Bounce', cursive;
+	color:rgb(0, 255, 179);
+}
+
+nav ul li {
+	margin: 0px 5px 0px 5px;
+	width: 100px;
+	height: 20px;
+	background: black;
+	color: white;
+	display: flex;
+	justify-content: space-around;
+	text-decoration: none;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box; 
+}
+
+nav ul li:hover{
+	border: 1px solid white;
+	font-weight: bold;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box; 
+}
+
+
+nav ul li a:active{
+	color: gray;
+	text-decoration: none;
+}
+
+
+.container {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+}
+
+* {
+	box-sizing: border-box; }
+  
+  html,
+  body {
+	background-color: #eee;
+	font-family: "Lato", sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0; }
+  
+.app {
+	width: 100vw;
+	height: 100vh;
+	display: flex; 
+}
+
+.app__uploader {
+	flex: 0 0 auto;
+	width: 50vw;
+	display: flex;
+	flex-direction: column; 
+}
+
+.app__uploader--activate {
+	opacity: 0.5; 
+}
+
+.uploader__icon-area {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center; 
+}
+
+.uploader__icon {
+	flex: 0 0 auto;
+	width: 90px; 
+}
+
+.uploader__area__text {
+	font-size: 14px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-weight: bold; 
+}
+
+.uploader__button-area {
+	flex: 0 0 auto;
+	text-align: center;
+	padding: 30px; 
+}
+
+.uploader__button {
+	border: none;
+	outline: none;
+	padding: 6px 12px;
+	font-size: 12px;
+	text-transform: uppercase;
+	background-color: #d056e6;
+	color: #fff;
+	border-radius: 3px;
+	overflow: hidden;
+	cursor: pointer; 
+}
+
+.uploader__button:hover{
+	background-color:rgb(0, 255, 179);
+	color: black;
+}
+
+.folders {
+	flex: 0 0 auto;
+	width: 50vw;
+	background-color: #ddd;
+	padding: 20px;
+	overflow-x: hidden;
+	overflow-y: auto; 
+}
+
+
+.app__folders__item {
+	display: flex;
+	align-items: center;
+	overflow: hidden; 
+}
+
+.app__files__item__file {
+	flex: 0 0 auto;
+	width: 20px; 
+}
+
+.app__files__item__info {
+	flex: 1 1 auto;
+	margin: 0 20px;
+	overflow: hidden; 
+}
+.app__files__item__info__name {
+	font-size: 14px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin: 0; }
+	.app__files__item__info__size {
+	font-size: 12px;
+	color: #666;
+	margin: 0; 
+}
+.app__files__item__delete {
+	flex: 0 0 auto;
+	width: 16px;
+	cursor: pointer; 
+}
+.app__files__item__open {
+	flex: 0 0 auto;
+	width: 16px;
+	margin-left: 10px;
+	cursor: pointer; 
+}
+.app__files__item:not(:last-child) {
+	margin-bottom: 20px; 
+}
+  
