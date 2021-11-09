@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "chokidar": "^3.4.3",
+    "dagre": "^0.8.5",
     "dependency-cruiser": "^10.6.0",
     "drag-drop": "^6.1.0",
     "electron": "^15.3.1",

@@ -2,9 +2,10 @@ import React, { Component, useState } from "react";
 import './stylesheets/style.css';
 import Main from './components/Main';
 import Diagram from './components/Diagram';
+import Diagram2 from './components/Diagram2';
 
 const App = () => {
-	const [state, setState] = useState({});
+	const [state, setState] = useState({default: true, modules: [{source:1, dependencies: [{b:2}]}]});
 
 	
 	const updateState = (e) => {

@@ -103,17 +103,17 @@ exports.generateDependencyObject = (folderArr) =>{
 			cruiseOptions
 		);
 
-		console.dir(cruiseResult, { depth: 20 });
+		// console.dir(cruiseResult, { depth: 20 });
 		json = JSON.stringify(cruiseResult.output);
 
 		notification.resultsAdded( folderArr.length );
 		
-		console.log('TREEIFY : ', treeify.asTree(cruiseResult.output));
+		// console.log('TREEIFY : ', treeify.asTree(cruiseResult.output));
 		fs.writeFile('results.json', json, 'utf8', ()=>console.log('JSON generated complete'));
 	} catch (error) {
-		console.error(error);
+		// console.error(error);
 	}
-	console.log('generated json file from io.js', json);
+	// console.log('generated json file from io.js', json);
 	return json;
 
 }
