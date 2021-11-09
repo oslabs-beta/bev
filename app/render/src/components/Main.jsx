@@ -1,6 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Diagram from './Diagram';
 const Main = (props) =>{
+	const results = React.createRef();
+
+
+	const updateState = (e) => {
+		// Access `results.json`
+		console.log('RESULTS = ', e.target.value);
+		props.setState(JSON.parse(e.target.value));
+	};
 
 	return (
 		<>
@@ -13,6 +22,12 @@ const Main = (props) =>{
 				<div id='svg-display'></div>
 				<div id='folderlist' className='folders'></div>
 				<div id='analyze-button'></div>
+				<div id='submit-button-div'>
+					{/* <input type='hidden' id='trigger' ref={results} value='' /> */}
+					<Link to="/chart">
+						<button id="trigger" ref={results} value="" onClick={(e) => updateState(e)}>Submit</button>
+					</Link>
+				</div>
 			</div>
 		</>
 	);

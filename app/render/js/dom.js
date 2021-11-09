@@ -15,7 +15,6 @@ window.openFolder = function ( itemId ) {
 
 // Delete folder from folders.json
 window.deleteFolder = function ( itemId ) {
-
 	// Get path of the file
 	const itemNode = document.getElementById( itemId );
 	const folderpath = itemNode.getAttribute( 'data-folderpath' );
@@ -24,7 +23,8 @@ window.deleteFolder = function ( itemId ) {
 		.then(folder => {
 			const removeNode = document.getElementById( folder.id );
 			removeNode.remove();
-		});
+		}
+	);	
 };
 
 exports.displayFolders = ( folders = [] ) => {

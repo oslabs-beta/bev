@@ -13,13 +13,6 @@ import NavBar from './components/NavBar';
 const App = () => {
 	const [state, setState] = useState({default: true});
 
-	const updateState = (e) => {
-		// Access `results.json`
-		console.log('RESULTS = ', e.target.value);
-		setState(JSON.parse(e.target.value));
-		setPage({current: 'chart'});
-	};	
-
 
 	// let route =  [<><Main /> <button id="trigger" value="" onClick={(e)=>updateState(e)} /></>]
 
@@ -32,12 +25,8 @@ const App = () => {
 			<div className='container'>
 				<NavBar />
 				<Routes>
-					<Route path="/" element={
-						<Main />
-					} />
-					<Route path="/chart" element={
-						<Diagram resultElements={state} />
-					} />
+					<Route path="/" setState={setState} element={<Main />} />
+					<Route path="/chart" resultElements={state} element={<Diagram />} />
 				</Routes>
 			</div>
 		</HashRouter>
