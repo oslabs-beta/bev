@@ -1,6 +1,4 @@
 import React from 'react';
-
-
 // Takes in an array of objects
 // Returns an array of objects for react-flow
 /* 
@@ -22,7 +20,6 @@ import React from 'react';
                 ),
             },
             position: { x: 250, y: 0 },
-
 
         Edge
             id: String,
@@ -63,6 +60,11 @@ const handleAnimated = (depType) => {
     return true;
 }
 
+const handleEdgeType = (depType) => {
+    if (depType === 'local' || depType === "root") return "straight";
+    return "custom";
+}
+
 const preprocess = (input) => {
     if (input.default === true) return [];
     const arrayOfModules = input.modules;
@@ -88,9 +90,11 @@ const preprocess = (input) => {
                 source: i,
                 target: sources.indexOf(resolved),
                 arrowHeadType: 'arrowclosed',
-                animated: handleAnimated(modules[resolved].dependencyType),
-                // type: 'smoothstep'
+                // animated: handleAnimated(modules[resolved].dependencyType),
+                // animated: false 
+                type: handleEdgeType(dependencyTypes[0])
             }
+            // if (newEdge.type === "straight") edges.push(newEdge);
             edges.push(newEdge);
         })
     }
@@ -104,12 +108,13 @@ const preprocess = (input) => {
             data: {
                 label: (
                     <>
-                        {modules[source].module}
+                        {`${i} -- ${modules[source].module}`}
                     </>
                 )
             },
             style: {background: handleNodeColor(modules[source].dependencyType)},
-            position: position
+            position: position,
+            targetPosition: 'bottom'
         };
         nodes.push(newNode);
     })
@@ -117,6 +122,45 @@ const preprocess = (input) => {
     return [...nodes, ...edges];
 }
 
+// {
+//   id: "root",
+//   properties: { "elk.direction": "RIGHT" },
+//   children: [
+//     { id: "n1", width: 10, height: 10 },
+//     { id: "n2", width: 10, height: 10 }
+//   ],
+//   edges: [{
+//     id: "e1", sources: [ "n1" ], targets: [ "n2" ]
+//   }]
+// }
+const preprocessDepCruiserResultsToELKJson = (input) => {
+    if (input.default === true) return [];
+    const arrayOfModules = input.modules;
+    const sources = [];
+    const output = {
+        id: "root",
+        properties: { "elk.direction": "DOWN"},
+        children: [
+            // { id: "n1", width: 10, height: 10 },
+            // { id: "n2", width: 10, height: 10 }
+        ],
+        edges: [
+            // {id: "e1", sources: [ "n1" ], targets: [ "n2" ]}
+        ]
+    }
+
+    arrayOfModules.forEach(module => {
+        const {source} = module;
+        sources.push(source);
+    })
+
+    arrayOfModules.forEach((module,i) => {
+        output.children.push({id: i, width: 100, height: 50})
+        output.edges.push({id: `e${i}`, sources: [i], targets: module.dependencies.map(el => sources.indexOf(el.resolved))})
+    })
+    console.log('output (ELK json)', output);
+    return output;
+}
 
 const exampleData =  [
   {
@@ -125,7 +169,7 @@ const exampleData =  [
     data: {
       label: (
         <>
-          Welcome to <strong>React Flow!</strong>
+        hi
         </>
       ),
     },
@@ -226,4 +270,4 @@ const exampleData =  [
   },
 ];
 
-export {preprocess, exampleData};
+export {preprocess, preprocessDepCruiserResultsToELKJson, exampleData};

@@ -8,8 +8,9 @@ import ReactFlow, {
   Background,
   isNode,
 } from 'react-flow-renderer';
-import dagre from 'dagre';
 import { preprocess, exampleData } from '../data/nodes';
+// import { useAsync } from 'react-use';
+import dagre from 'dagre';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -18,13 +19,20 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 // In a real world app you would use the correct width and height values of
 // const nodes = useStoreState(state => state.nodes) and then node.__rf.width, node.__rf.height
 
-const nodeWidth = 172;
-const nodeHeight = 36;
+const nodeWidth = 150;
+const nodeHeight = 50;
 
+/*
+TB = Top Bottom
+LR = Left Right
+Referring to the vertical or horizontal rendering of our diagram
+ */
 const getLayoutedElements = (elements, direction = 'TB') => {
   const isHorizontal = direction === 'LR';
+  // dagre library changes the direction of the chart?
   dagreGraph.setGraph({ rankdir: direction });
 
+  // creates each element (node) with the correct edges
   elements.forEach((el) => {
     if (isNode(el)) {
       dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
@@ -38,15 +46,16 @@ const getLayoutedElements = (elements, direction = 'TB') => {
   return elements.map((el) => {
     if (isNode(el)) {
       const nodeWithPosition = dagreGraph.node(el.id);
-      el.targetPosition = isHorizontal ? 'left' : 'top';
-      el.sourcePosition = isHorizontal ? 'right' : 'bottom';
+      // if isHorizontal is true, then assign the elements a different position based on orientation
+      el.targetPosition = isHorizontal ? 'left' : 'bottom';
+      el.sourcePosition = isHorizontal ? 'right' : 'top';
 
       // unfortunately we need this little hack to pass a slightly different position
       // to notify react flow about the change. Moreover we are shifting the dagre node position
       // (anchor=center center) to the top left so it matches the react flow node anchor point (top left).
       el.position = {
-        x: nodeWithPosition.x - nodeWidth / 2 + Math.random() / 1000,
-        y: nodeWithPosition.y - nodeHeight / 2,
+        x: nodeWithPosition.x - nodeWidth / 1.5 + Math.random() / 1000,
+        y: nodeWithPosition.y - nodeHeight / 1.5,
       };
     }
 
@@ -60,18 +69,15 @@ const onLoad = (reactFlowInstance) => {
   reactFlowInstance.fitView();
 };
 
-const OverviewFlow = ({ resultsElements }) => {
-  console.log('resultsElements', resultsElements); // This works!
-  const nodes = preprocess(resultsElements);
+const Diagram = ({ resultElements }) => {
+  console.log('resultElements', resultElements); // This works!
+  const nodes = getLayoutedElements(preprocess(resultElements));
   console.log('preprocessed nodes!!', nodes);
 
-
-  const [elements, setElements] = useState(nodes);
+  const [elements, setElements]= useState(nodes);
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));
   const onConnect = (params) => setElements((els) => addEdge(params, els));
-  const layoutedElements = getLayoutedElements(nodes);
-
   const onLayout = useCallback(
     (direction) => {
       const layoutedElements = getLayoutedElements(elements, direction);
@@ -79,11 +85,9 @@ const OverviewFlow = ({ resultsElements }) => {
     },
     [elements]
   );
-
-
   useEffect(() => {
     setElements(nodes);
-  }, [resultsElements])
+  }, [resultElements])
 
   return (
     <>
@@ -113,6 +117,10 @@ const OverviewFlow = ({ resultsElements }) => {
           nodeBorderRadius={2}
         />
         <Controls />
+          <div className="controls">
+          <button onClick={() => onLayout('TB')}>vertical layout</button>
+          <button onClick={() => onLayout('LR')}>horizontal layout</button>
+        </div>
         <Background color="#aaa" gap={16} />
       </ReactFlow>
     </>
@@ -120,4 +128,4 @@ const OverviewFlow = ({ resultsElements }) => {
 
 };
 
-export default OverviewFlow;
+export default Diagram;

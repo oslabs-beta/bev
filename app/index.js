@@ -76,6 +76,6 @@ ipcMain.on( 'app:on-folder-open', ( event, folder ) => {
 // Listen to analyze dependencies event
 ipcMain.handle( 'app:on-analyze', ( event, folders ) => {
 	const results = io.generateDependencyObject(folders);
-    console.log('RESULTS IN THE BACKEND ', results);
+    console.log('RESULTS IN THE BACKEND IN INDEX.JS', results);
 	return results;
 } );
