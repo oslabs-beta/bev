@@ -22,10 +22,17 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 150;
 const nodeHeight = 50;
 
+/*
+TB = Top Bottom
+LR = Left Right
+Referring to the vertical or horizontal rendering of our diagram
+ */
 const getLayoutedElements = (elements, direction = 'TB') => {
   const isHorizontal = direction === 'LR';
+  // dagre library changes the direction of the chart?
   dagreGraph.setGraph({ rankdir: direction });
 
+  // creates each element (node) with the correct edges
   elements.forEach((el) => {
     if (isNode(el)) {
       dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
@@ -39,6 +46,7 @@ const getLayoutedElements = (elements, direction = 'TB') => {
   return elements.map((el) => {
     if (isNode(el)) {
       const nodeWithPosition = dagreGraph.node(el.id);
+      // if isHorizontal is true, then assign the elements a different position based on orientation
       el.targetPosition = isHorizontal ? 'left' : 'bottom';
       el.sourcePosition = isHorizontal ? 'right' : 'top';
 

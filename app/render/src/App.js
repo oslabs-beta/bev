@@ -1,4 +1,8 @@
 import React, { Component, useState } from "react";
+import {
+	HashRouter,
+	Route
+} from 'react-router-dom';
 import './stylesheets/style.css';
 import Main from './components/Main';
 import Diagram from './components/Diagram';
@@ -24,10 +28,12 @@ const App = () => {
 	} 
 
 	return (
-		<div className='container'>
-			<NavBar page={page} setPage={setPage} />
-			{route}
-		</div>
+		<HashRouter>
+			<div className='container'>
+				<NavBar page={page} setPage={setPage} />
+				{route}
+			</div>
+		</HashRouter>
 	);
 }
 

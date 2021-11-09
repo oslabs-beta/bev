@@ -10,10 +10,12 @@ const NavBar = (props) =>{
         backHome = [<li key='home'><button onClick={()=> home()}>Back</button></li>];
     }
 
-    return (<nav>
-        <ul className='title'>BEV</ul>
-        {backHome}
-    </nav>);
+    return (
+        <nav>
+            <h1 className='title'>BEV</h1>
+            {backHome}
+        </nav>
+    );
 }
 
 export default NavBar;
