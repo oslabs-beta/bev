@@ -89,12 +89,12 @@ const preprocess = (input) => {
                 target: sources.indexOf(resolved),
                 arrowHeadType: 'arrowclosed',
                 animated: handleAnimated(modules[resolved].dependencyType),
-                type: 'smoothstep'
+                // type: 'smoothstep'
             }
             edges.push(newEdge);
         })
     }
-    console.log('modules', modules);
+
     // Get nodes 
     arrayOfModules.forEach((mod,i) => {
         const {source, dependencies} = mod;
@@ -107,7 +107,6 @@ const preprocess = (input) => {
                         {modules[source].module}
                     </>
                 )
-                // label: source
             },
             style: {background: handleNodeColor(modules[source].dependencyType)},
             position: position

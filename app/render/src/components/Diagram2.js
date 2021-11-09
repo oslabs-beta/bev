@@ -1,15 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback } from 'react';
-
 import ReactFlow, {
-  removeElements,
+  ReactFlowProvider,
   addEdge,
-  MiniMap,
-  Controls,
-  Background,
+  removeElements,
   isNode,
 } from 'react-flow-renderer';
 import dagre from 'dagre';
+
 import { preprocess, exampleData } from '../data/nodes';
+
+// import './layouting.css';
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -55,22 +56,15 @@ const getLayoutedElements = (elements, direction = 'TB') => {
 };
 
 
-const onLoad = (reactFlowInstance) => {
-  console.log('flow loaded:', reactFlowInstance);
-  reactFlowInstance.fitView();
-};
-
-const OverviewFlow = ({ resultsElements }) => {
-  console.log('resultsElements', resultsElements); // This works!
-  const nodes = preprocess(resultsElements);
-  console.log('preprocessed nodes!!', nodes);
-
-
-  const [elements, setElements] = useState(nodes);
+const LayoutFlow = ({resultsElements}) => {
+  const [elements, setElements] = useState(preprocess(resultsElements.modules));
+  const nodes = preprocess(resultsElements.modules);
+  const onConnect = (params) =>
+    setElements((els) =>
+      addEdge({ ...params, type: 'smoothstep', animated: true }, els)
+    );
   const onElementsRemove = (elementsToRemove) =>
     setElements((els) => removeElements(elementsToRemove, els));
-  const onConnect = (params) => setElements((els) => addEdge(params, els));
-  const layoutedElements = getLayoutedElements(nodes);
 
   const onLayout = useCallback(
     (direction) => {
@@ -80,44 +74,26 @@ const OverviewFlow = ({ resultsElements }) => {
     [elements]
   );
 
-
   useEffect(() => {
     setElements(nodes);
   }, [resultsElements])
 
   return (
-    <>
-      <ReactFlow
-        elements={elements}
-        onElementsRemove={onElementsRemove}
-        onConnect={onConnect}
-        onLoad={onLoad}
-        snapToGrid={true}
-        snapGrid={[15, 15]}
-        className="react-flow-fix"
-      >
-        <MiniMap
-          nodeStrokeColor={(n) => {
-            if (n.style?.background) return n.style.background;
-            if (n.type === 'input') return '#0041d0';
-            if (n.type === 'output') return '#ff0072';
-            if (n.type === 'default') return '#1a192b';
-
-            return '#eee';
-          }}
-          nodeColor={(n) => {
-            if (n.style?.background) return n.style.background;
-
-            return '#fff';
-          }}
-          nodeBorderRadius={2}
+    <div className="layoutflow">
+      <ReactFlowProvider>
+        <ReactFlow
+          elements={elements}
+          onConnect={onConnect}
+          onElementsRemove={onElementsRemove}
+          connectionLineType="smoothstep"
         />
-        <Controls />
-        <Background color="#aaa" gap={16} />
-      </ReactFlow>
-    </>
+        <div className="controls">
+          <button onClick={() => onLayout('TB')}>vertical layout</button>
+          <button onClick={() => onLayout('LR')}>horizontal layout</button>
+        </div>
+      </ReactFlowProvider>
+    </div>
   );
-
 };
 
-export default OverviewFlow;
+export default LayoutFlow;

@@ -258,3 +258,6 @@ nav ul li a:active{
 	margin-bottom: 20px; 
 }
   
+.react-flow-fix {
+	position: unset !important;
+}
