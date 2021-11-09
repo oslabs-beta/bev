@@ -12,7 +12,6 @@ import NavBar from './components/NavBar';
 
 const App = () => {
 	const [state, setState] = useState({default: true});
-	const [page , setPage] = useState({current: 'home'})
 
 	const updateState = (e) => {
 		// Access `results.json`
@@ -31,7 +30,7 @@ const App = () => {
 	return (
 		<HashRouter>
 			<div className='container'>
-				<NavBar page={page} setPage={setPage} />
+				<NavBar />
 				<Routes>
 					<Route path="/" element={
 						<Main />

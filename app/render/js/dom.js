@@ -26,31 +26,9 @@ window.deleteFolder = function ( itemId ) {
 		});
 };
 
-window.analyzeDep = function () {
-	const folderNodes = document.getElementsByClassName('app__folders__item');
-	const folderObjs = Array.from(folderNodes);
-	const folders = folderObjs.map( node => node.getAttribute('data-folderpath'))
-
-	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
-		//change the value of a dom element.
-		console.log('RESULTS SENT FROM THE BACKEND ', results);
-		const trigger = document.getElementById('trigger');
-		trigger.value = results;
-	});
-};
-
 exports.displayFolders = ( folders = [] ) => {
 	const folderListElem = document.getElementById( 'folderlist' );
 	folderListElem.innerHTML = '';
-
-	const analyzeButton = document.createElement('button');
-	analyzeButton.setAttribute('onclick', 'analyzeDep()');
-	analyzeButton.innerText = 'Analyze Dependencies';
-
-	const divElem = document.createElement( 'div' );
-	divElem.setAttribute( 'class', 'button_container' );
-	divElem.appendChild( analyzeButton );
-	folderListElem.appendChild( divElem );
 
 	folders.forEach( (folder, index) => {
 			const itemDomElem = document.createElement( 'div' );
@@ -65,5 +43,25 @@ exports.displayFolders = ( folders = [] ) => {
 
 			folderListElem.appendChild( itemDomElem );
 	} );
-
 };
+
+window.analyzeDep = function () {
+	const folderNodes = document.getElementsByClassName('app__folders__item');
+	const folderObjs = Array.from(folderNodes);
+	const folders = folderObjs.map( node => node.getAttribute('data-folderpath'))
+
+	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
+		//change the value of a dom element.
+		console.log('RESULTS SENT FROM THE BACKEND ', results);
+		const trigger = document.getElementById('trigger');
+		trigger.value = results;
+	});
+};
+
+// Create an analyze button which has access to the analyzeDep function
+// Append it below the folder display area (see app/src/components/Main.jsx)
+const analyzeButton = document.createElement('button');
+analyzeButton.setAttribute('onclick', 'analyzeDep()');
+analyzeButton.innerText = 'Analyze Dependencies';
+const analyzeDiv = document.getElementById('analyze-button');
+analyzeDiv.appendChild(analyzeButton);

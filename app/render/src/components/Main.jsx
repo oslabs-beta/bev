@@ -12,6 +12,7 @@ const Main = (props) =>{
 				</div>
 				<div id='svg-display'></div>
 				<div id='folderlist' className='folders'></div>
+				<div id='analyze-button'></div>
 			</div>
 		</>
 	);
