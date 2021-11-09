@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import {
 	HashRouter,
+	Routes,
 	Route
 } from 'react-router-dom';
 import './stylesheets/style.css';
@@ -21,17 +22,24 @@ const App = () => {
 	};	
 
 
-	let route =  [<><Main /> <button id="trigger" value="" onClick={(e)=>updateState(e)} /></>]
+	// let route =  [<><Main /> <button id="trigger" value="" onClick={(e)=>updateState(e)} /></>]
 
-	if(page.current === 'chart' ){
-		route = [<><div><Diagram resultsElements={state}/></div></>];
-	} 
+	// if(page.current === 'chart' ){
+	// 	route = [<><div><Diagram resultsElements={state}/></div></>];
+	// } 
 
 	return (
 		<HashRouter>
 			<div className='container'>
 				<NavBar page={page} setPage={setPage} />
-				{route}
+				<Routes>
+					<Route path="/" element={
+						<Main />
+					} />
+					<Route path="/chart" element={
+						<Diagram resultElements={state} />
+					} />
+				</Routes>
 			</div>
 		</HashRouter>
 	);
