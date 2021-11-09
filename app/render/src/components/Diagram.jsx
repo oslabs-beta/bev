@@ -69,9 +69,9 @@ const onLoad = (reactFlowInstance) => {
   reactFlowInstance.fitView();
 };
 
-const OverviewFlow = ({ resultsElements }) => {
-  console.log('resultsElements', resultsElements); // This works!
-  const nodes = getLayoutedElements(preprocess(resultsElements));
+const Diagram = ({ resultElements }) => {
+  console.log('resultElements', resultElements); // This works!
+  const nodes = getLayoutedElements(preprocess(resultElements));
   console.log('preprocessed nodes!!', nodes);
 
   const [elements, setElements]= useState(nodes);
@@ -87,7 +87,7 @@ const OverviewFlow = ({ resultsElements }) => {
   );
   useEffect(() => {
     setElements(nodes);
-  }, [resultsElements])
+  }, [resultElements])
 
   return (
     <>
@@ -128,4 +128,4 @@ const OverviewFlow = ({ resultsElements }) => {
 
 };
 
-export default OverviewFlow;
+export default Diagram;

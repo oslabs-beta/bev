@@ -25,8 +25,8 @@ const App = () => {
 			<div className='container'>
 				<NavBar />
 				<Routes>
-					<Route path="/" setState={setState} element={<Main />} />
-					<Route path="/chart" resultElements={state} element={<Diagram />} />
+					<Route path="/" element={<Main setState={setState} />} />
+					<Route path="/chart"  element={<Diagram resultElements={state} />} />
 				</Routes>
 			</div>
 		</HashRouter>
