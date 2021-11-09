@@ -43,6 +43,14 @@ exports.displayFolders = ( folders = [] ) => {
 
 			folderListElem.appendChild( itemDomElem );
 	} );
+
+	// Logic to tone up or down the 'Analyze Dependencies' button based on if folders have been selected
+	if (!folders[0]) {
+		analyzeButton.disabled = true;
+	}
+	else {
+		analyzeButton.disabled = false;
+	}
 };
 
 window.analyzeDep = function () {
@@ -62,6 +70,8 @@ window.analyzeDep = function () {
 // Append it below the folder display area (see app/src/components/Main.jsx)
 const analyzeButton = document.createElement('button');
 analyzeButton.setAttribute('onclick', 'analyzeDep()');
+// Disabled by default, but will be removed if displayFolders is invoked and populates its array
+analyzeButton.disabled = true;
 analyzeButton.innerText = 'Analyze Dependencies';
 const analyzeDiv = document.getElementById('analyze-button');
 analyzeDiv.appendChild(analyzeButton);
