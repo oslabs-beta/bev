@@ -1,5 +1,6 @@
 const { ipcRenderer } = require( 'electron' );
 const path = require('path');
+const { Link } = require('react-router-dom');
 
 // Open folder
 window.openFolder = function ( itemId ) {
@@ -45,12 +46,7 @@ exports.displayFolders = ( folders = [] ) => {
 	} );
 
 	// Logic to tone up or down the 'Analyze Dependencies' button based on if folders have been selected
-	if (!folders[0]) {
-		analyzeButton.disabled = true;
-	}
-	else {
-		analyzeButton.disabled = false;
-	}
+	!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
 };
 
 window.analyzeDep = function () {
@@ -64,6 +60,7 @@ window.analyzeDep = function () {
 		const trigger = document.getElementById('trigger');
 		trigger.value = results;
 	});
+
 };
 
 // Create an analyze button which has access to the analyzeDep function
