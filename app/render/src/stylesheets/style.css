@@ -122,6 +122,8 @@ nav ul li a:active{
 
 
 .container {
+	top: 5em;
+	position: absolute;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
