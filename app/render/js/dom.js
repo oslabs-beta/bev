@@ -59,6 +59,7 @@ window.analyzeDep = function () {
 		console.log('RESULTS SENT FROM THE BACKEND ', results);
 		const trigger = document.getElementById('trigger');
 		trigger.value = results;
+		trigger.click();
 	});
 
 };
