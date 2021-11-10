@@ -7,7 +7,7 @@ const Main = (props) =>{
 
 	const updateState = (e) => {
 		// Access `results.json`
-		console.log('RESULTS = ', e.target.value);
+		console.log('CLICKED TRIGGER');
 		props.setState(JSON.parse(e.target.value));
 	};
 
@@ -25,7 +25,7 @@ const Main = (props) =>{
 				<div id='submit-button-div'>
 					{/* <input type='hidden' id='trigger' ref={results} value='' /> */}
 					<Link to="/chart">
-						<button id="trigger" ref={results} value="" onClick={(e) => updateState(e)}>Submit</button>
+						<input type="hidden" id="trigger" ref={results} value="" onClick={(e) => updateState(e)} />
 					</Link>
 				</div>
 			</div>

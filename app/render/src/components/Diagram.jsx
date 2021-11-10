@@ -117,7 +117,7 @@ const Diagram = ({ resultElements }) => {
           nodeBorderRadius={2}
         />
         <Controls />
-          <div className="controls">
+          <div id="controls" className="controls">
           <button onClick={() => onLayout('TB')}>vertical layout</button>
           <button onClick={() => onLayout('LR')}>horizontal layout</button>
         </div>
