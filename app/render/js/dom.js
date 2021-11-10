@@ -18,11 +18,12 @@ window.deleteFolder = function ( itemId ) {
 	// Get path of the file
 	const itemNode = document.getElementById( itemId );
 	const folderpath = itemNode.getAttribute( 'data-folderpath' );
+	const removeNode = document.getElementById( itemId );
+	removeNode.remove();
 	// Send event to the main thread
 	ipcRenderer.invoke( 'app:on-folder-delete', { id: itemId, folderpath } )
-		.then(folder => {
-			const removeNode = document.getElementById( folder.id );
-			removeNode.remove();
+		.then(folders => {
+			!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
 		}
 	);	
 };

@@ -22,7 +22,7 @@ const App = () => {
 
 	return (
 		<HashRouter>
-			<div className='container'>
+			<div >
 				<NavBar />
 				<Routes>
 					<Route path="/" element={<Main setState={setState} />} />
