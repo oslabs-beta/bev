@@ -75,6 +75,8 @@ nav {
 }
 
 nav ul {
+	top: 0em;
+	position: absolute;
 	list-style-type: none;
 	display: flex;
 	flex-direction: row;

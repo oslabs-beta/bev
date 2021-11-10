@@ -107,8 +107,9 @@ dist
 *.BAK
 
 # bundles
-app/render/bundle.js
-app/render/bundle.js.LICENSE.txt
+app/render/html/bundle.js
+app/render/html/index.html
+app/render/html/bundle.js.LICENSE.txt
 
 # results
 results.json
