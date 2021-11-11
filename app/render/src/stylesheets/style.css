@@ -1,24 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Josefin+Sans:wght@700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap');
 
+* { font-family: Roboto, sans-serif; font-size: 14px;}
+
 body {
+	display: grid;
+	grid-template-columns: 1fr minmax(auto, 9fr) 1fr;
+	grid-template-rows: 1fr 10fr;
 	background-color: rgb(254, 251, 204);
-	font-family: "Lato", sans-serif;
-	font-size: 14px;
 	padding: 0;
 	margin: 0;
 }
 
+div {
+	border-radius: 2em !important;
+}
+
 button {
 	border: none;
-		  outline: none;
-		  padding: 6px 12px;
-		  font-size: 12px;
-		  text-transform: uppercase;
-		  background-color: rgb(254, 201, 176);
-		  color: #fff;
-		  border-radius: 3px;
-		  overflow: hidden;
-		  cursor: pointer; 
+	outline: none;
+	padding: 6px 12px;
+	font-size: 12px;
+	text-transform: uppercase;
+	background-color: rgb(254, 201, 176);
+	color: #fff;
+	border-radius: 2em;
+	overflow: hidden;
+	cursor: pointer;
+	margin: 2em .5em;
 }
 
 button:hover{
@@ -35,6 +43,9 @@ button:hover{
 }
 
 nav {
+	display: grid;
+	grid-row: 1;
+	grid-gap: 1em;
 	z-index: 5;
 	width: 100%;
 	height: 5em;
@@ -59,19 +70,22 @@ nav ul {
 }
 
 h1 {
-	display: flex;
-	flex-direction: row;
+	/* display: flex;
+	flex-direction: row; */
+	display: grid;
+	grid-row: inherit;
 	font-size: 3em;
 	justify-content: center;
 	align-items: center;
 	font-family: 'Josefin Sans', sans-serif;
 	color: rgb(150, 133, 211);
+	margin: .4em;
 }
 
 nav ul li {
-	margin: 0px 5px;
-	width: 100px;
-	height: 20px;
+	margin: .7em;
+	width: 5em;
+	height: 1.3em;
 	background: rgb(254, 201, 176);
 	color: white;
 	display: flex;
@@ -79,7 +93,8 @@ nav ul li {
 	text-decoration: none;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-	box-sizing: border-box; 
+	box-sizing: border-box;
+	border-radius: 2em;
 }
 
 nav ul li:hover{
@@ -109,16 +124,7 @@ nav ul li a:active{
 
 }
 
-* {
-	box-sizing: border-box; }
-  
-  html,
-  body {
-	background-color: #eee;
-	font-family: "Lato", sans-serif;
-	font-size: 14px;
-	padding: 0;
-	margin: 0; }
+* { box-sizing: border-box; }
   
 .app {
 	width: 100vw;
@@ -160,7 +166,6 @@ nav ul li a:active{
 .uploader__button-area {
 	flex: 0 0 auto;
 	text-align: center;
-	padding: 30px; 
 }
 
 .uploader__button {
@@ -171,7 +176,6 @@ nav ul li a:active{
 	text-transform: uppercase;
 	background-color: rgb(254, 201, 176);
 	color: #fff;
-	border-radius: 3px;
 	overflow: hidden;
 	cursor: pointer; 
 }
@@ -194,12 +198,8 @@ nav ul li a:active{
 .app__folders__item {
 	display: flex;
 	align-items: center;
-	overflow: hidden; 
-}
-
-.app__files__item__file {
-	flex: 0 0 auto;
-	width: 20px; 
+	overflow: hidden;
+	margin: .5em;
 }
 
 .app__files__item__info {
@@ -207,6 +207,7 @@ nav ul li a:active{
 	margin: 0 20px;
 	overflow: hidden; 
 }
+
 .app__files__item__info__name {
 	font-size: 14px;
 	overflow: hidden;
@@ -218,17 +219,14 @@ nav ul li a:active{
 	color: rgb(107, 83, 96);
 	margin: 0; 
 }
-.app__files__item__delete {
+
+.app__files__item__file, .app__files__item__delete, .app__files__item__open {
 	flex: 0 0 auto;
 	width: 16px;
+	margin: 0 .3em;
 	cursor: pointer; 
 }
-.app__files__item__open {
-	flex: 0 0 auto;
-	width: 16px;
-	margin-left: 10px;
-	cursor: pointer; 
-}
+
 .app__files__item:not(:last-child) {
 	margin-bottom: 20px; 
 }
@@ -241,8 +239,20 @@ nav ul li a:active{
 	top: 5em !important;
 }
 
+.react-flow__controls {
+	opacity: 80%;
+}
+
 .controls {
-	z-index: 5;
-	top: 5em !important;
+	justify-content: center;
+	margin-top: 5em;
+	z-index: 6;
 	position: absolute;
+	width: 100%;
+	align-items: center;
+	display: inline-flex;
+}
+
+#folderlist {
+	border-radius: 2em;
 }

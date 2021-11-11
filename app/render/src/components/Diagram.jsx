@@ -91,6 +91,10 @@ const Diagram = ({ resultElements }) => {
 
   return (
     <>
+      <div id="controls" className="controls">
+        <button onClick={() => onLayout('TB')}>vertical layout</button>
+        <button onClick={() => onLayout('LR')}>horizontal layout</button>
+      </div>
       <ReactFlow
         elements={elements}
         onElementsRemove={onElementsRemove}
@@ -117,10 +121,6 @@ const Diagram = ({ resultElements }) => {
           nodeBorderRadius={2}
         />
         <Controls />
-          <div id="controls" className="controls">
-          <button onClick={() => onLayout('TB')}>vertical layout</button>
-          <button onClick={() => onLayout('LR')}>horizontal layout</button>
-        </div>
         <Background color="#aaa" gap={16} />
       </ReactFlow>
     </>
