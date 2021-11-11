@@ -6,8 +6,7 @@ const Main = (props) =>{
 	console.log('props from Main.jsx', props)
 
 	const updateState = (e) => {
-		// Access `results.json`
-		console.log('CLICKED TRIGGER');
+		// Access `results.json` from the local machine
 		props.setState(JSON.parse(e.target.value));
 	};
 
