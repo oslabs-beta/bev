@@ -111,6 +111,9 @@ app/render/html/bundle.js
 app/render/html/index.html
 app/render/html/bundle.js.LICENSE.txt
 
+#ignore out files
+release/
+
 # results
 results.json
 dependency-graph.svg
