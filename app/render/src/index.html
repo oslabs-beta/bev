@@ -9,15 +9,7 @@
 <body style="padding: 0px;">
   <div id="app"></div>
 
-  <script defer="defer">
-    document.addEventListener('DOMContentLoaded', () => {
-      require( '../js/renderer.js' );
-      const uploaderButton = document.getElementById('uploader-button');
-      uploaderButton.addEventListener('click', (e)=> {
-        console.log('CLICKED ON BUTTON');
-        openDialog();
-      });
-    });
-</script>
+  <script defer src="../js/renderer.js"></script>
+
 </body>
 </html>
