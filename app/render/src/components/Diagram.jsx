@@ -138,6 +138,10 @@ const Diagram = ({ resultElements }) => {
 
   return (
     <>
+      <div id="controls" className="controls">
+        <button onClick={() => onLayout('TB')}>vertical layout</button>
+        <button onClick={() => onLayout('LR')}>horizontal layout</button>
+      </div>
       <ReactFlow
         elements={elements}
         // onElementClick={(evt, emt) => onElementClick(evt, emt)}
