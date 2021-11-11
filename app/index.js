@@ -34,7 +34,7 @@ app.on( 'ready', () => {
     // Watch files
     // It looks for changes in the file and that's probably how it sends notifications
     // If a file is created or deleted, then send notif
-    io.watchFiles( win );
+    // io.watchFiles( win );
 } );
 
 // When all windows are closed, quit the app

@@ -3,7 +3,6 @@ const path = require( 'path' );
 const fs = require( 'fs-extra' );
 const os = require( 'os' );
 const open = require( 'open' );
-const chokidar = require( 'chokidar' );
 const treeify = require('treeify');
 const {cruise} = require("dependency-cruiser");
 
