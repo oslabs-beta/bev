@@ -9,67 +9,7 @@
 <body style="padding: 0px;">
   <div id="app"></div>
 
-  <script defer="defer">
-    document.addEventListener('DOMContentLoaded', () => {
-      const { ipcRenderer } = require( 'electron' );
-      const dom = require( '../js/dom.js' );
-      require( '../js/renderer.js' );
+  <script defer src="../js/renderer.js"></script>
 
-      //function to generate buttons
-      const setMainButtons = () => {
-        console.log('setMAINBUTTONS RAN');
-        const uploaderButton = document.getElementById('uploader-button');
-        if(uploaderButton){
-          uploaderButton.addEventListener('click', (e)=> {
-            console.log('CLICKED ON BUTTON INSIDE OBSERVER');
-            openDialog();
-          });
-        }
-
-        // Create an analyze button which has access to the analyzeDep function
-        // Append it below the folder display area (see app/src/components/Main.jsx)
-        const analyzeButton = document.createElement('button');
-        analyzeButton.setAttribute('id', '');
-        analyzeButton.setAttribute('onclick', 'analyzeDep()');
-        // Disabled by default, but will be removed if displayFolders is invoked and populates its array
-        analyzeButton.disabled = true;
-        analyzeButton.innerText = 'Analyze Dependencies';
-        const analyzeDiv = document.getElementById('analyze-button');
-        if(analyzeDiv) analyzeDiv.appendChild(analyzeButton);
-      }
-
-      setMainButtons();
-
-      // identify an element to observe
-      elementToObserve = window.document.getElementById('app').children[0];
-
-      // create a new instance of 'MutationObserver' named 'observer', 
-      // Listen for changes(mutations) in the app div which would trigger the callback
-      observer = new MutationObserver(function(mutationsList, observer) {
-          console.log('MUTATIONLIST : ', mutationsList);
-          require( '../js/renderer.js' );
-          setMainButtons();
-
-          //display folders
-          // Get list of folders from the `main` process when app start
-          ipcRenderer.invoke( 'app:get-folders' ).then( ( folders = [] ) => {
-              dom.displayFolders( folders );
-          } );
-
-      });
-
-      // call 'observe' on that MutationObserver instance, 
-      // passing it the element to observe, and the options object
-      observer.observe(elementToObserve, {characterData: false, childList: true, attributes: false});
-
-      
-      // const uploaderButton = document.getElementById('uploader-button');
-      // uploaderButton.addEventListener('click', (e)=> {
-      //   console.log('CLICKED ON BUTTON');
-      //   openDialog();
-      // });
-
-    });
-</script>
 </body>
 </html>

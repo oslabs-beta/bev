@@ -18,12 +18,12 @@ const folderName = 'folders.json';
 // Get list of Folders
 exports.getFolders = () => {
 	 // Ensure `appDir` exists
-	 fs.ensureDirSync( appDir );
+	fs.ensureDirSync( appDir );
 
 	 // If folder does not exist then create folder
-	 if(!fs.existsSync(path.resolve(appDir, folderName))){
+	if(!fs.existsSync(path.resolve(appDir, folderName))){
 		fs.writeFileSync(path.resolve(appDir, folderName), JSON.stringify([]));
-	 }
+	}
 
 	const foldersRaw = fs.readFileSync( path.resolve(appDir, folderName));
 	const folders = JSON.parse(foldersRaw);
@@ -82,7 +82,7 @@ exports.generateDependencyObject = (folderArr) =>{
 	const cruiseOptions = {
 		includeOnly: ["src", "assets", "node_modules"],
 		exclude: {
-			path: ["release", "public"]
+			path: ["release", "public", "dist"]
 		},
 		doNotFollow: {
 			"path": "node_modules",

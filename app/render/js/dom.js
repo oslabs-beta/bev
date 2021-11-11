@@ -23,7 +23,9 @@ window.deleteFolder = function ( itemId ) {
 	// Send event to the main thread
 	ipcRenderer.invoke( 'app:on-folder-delete', { id: itemId, folderpath } )
 		.then(folders => {
-			!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
+			const analyzeButton = document.getElementById('anal-button');
+			console.log('FOLDERS AFTER DELETE ', folders[0]);
+			folders[0] ? analyzeButton.disabled = false : analyzeButton.disabled = true;
 		}
 	);	
 };
@@ -58,7 +60,6 @@ window.analyzeDep = function () {
 
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
 		//change the value of a dom element.
-		// console.log('RESULTS SENT FROM THE BACKEND ', results);
 		const trigger = document.getElementById('trigger');
 		trigger.value = results;
 		trigger.click();

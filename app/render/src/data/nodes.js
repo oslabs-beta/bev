@@ -1,54 +1,7 @@
 import React from 'react';
 // Takes in an array of objects
 // Returns an array of objects for react-flow
-/* 
-    React-flow structure
-        Node
-            id: String,
-            type: String,
-            data: {label: jsx}
-            position: {x: Number, y: Number},
-            style: [optional]
-        e.g.
-            id: '1',
-            type: 'input',
-            data: {
-                label: (
-                    <>
-                        Welcome to <strong>React Flow!</strong>
-                    </>
-                ),
-            },
-            position: { x: 250, y: 0 },
 
-        Edge
-            id: String,
-            source: Node.id,
-            target: Node.id,
-            arrowHeadType: String,
-            animated: Boolean,
-            label: String
-        e.g.
-            id: 'e4-5',
-            source: '4',
-            target: '5',
-            arrowHeadType: 'arrowclosed',
-            label: 'edge with arrow head',
-
-    Dependency cruiser structure
-        Module
-            source: String,
-            dependencies: [{module: String, moduleSystem: String, dependencyTypes:[String]}]
-        e.g.
-            source: "../test-single-spa/single-spa-parcel-example/sample-react/src/components/Home.js"
-            dependencies: [
-                {
-                    module: "../services/api_service.js",
-                    moduleSystem: "es6",
-                    dependencyTypes: ["local"]
-                }
-            ]
-*/ 
 const handleNodeColor = (depType) => {
     if (depType === 'local') return '#A4DDED';
     else if (depType === 'root') return '#FFF8DC';
@@ -65,10 +18,75 @@ const handleEdgeType = (depType) => {
     return "custom";
 }
 
+const handleEdgeStyle = (depType) => {
+    if (depType === 'local' || depType === "root") return {'strokeWidth': 2.5, 'stroke': 'lightblue'};
+    return {'strokeWidth': 0.7, 'stroke': 'salmon'};
+}
+
+const refactorNodesForSharedDeps = (elementsObj) => {
+  console.log('elementsObj', elementsObj)
+  const {localDependencies, thirdPartyDependencies, edges} = elementsObj;
+  const thirdPartyDuplicatesCatcher = {} // moduleName: [ids]
+  let thirdPartiesToDeleteIds = [];
+  let thirdPartiesToKeepIds = [];
+
+  // Get third-party dependency duplicates (or more than 1)
+  thirdPartyDependencies.forEach(dep => {
+    const name = dep.data.label;
+    console.log('name', name.props.children);
+    thirdPartyDuplicatesCatcher[name.props.children] ? thirdPartyDuplicatesCatcher[name.props.children].push(dep.id) : thirdPartyDuplicatesCatcher[name.props.children] = [dep.id];
+  })
+  console.log('thirdPartyDuplicatesCatcher', thirdPartyDuplicatesCatcher)
+  let tempDepsArray = Object.entries(thirdPartyDuplicatesCatcher).filter(([k,v]) => v.length > 1);
+  const thirdPartyDuplicates = {};
+  tempDepsArray.forEach(pair => thirdPartyDuplicates[pair[0]] = pair[1]);
+  console.log('thirdPartyDuplicates', thirdPartyDuplicates);
+  console.log('thirdPartyDependencies', thirdPartyDependencies);
+
+  // Update edges
+  edges.map(edge => {
+    console.log('traversing edges', edge)
+    const {target, source, id} = edge;
+    let newTarget;
+    // for (let i = 0; i < thirdPartyDependencies.length; i += 1) {
+    //   const currentDep = thirdPartyDependencies[i];
+    //   currentDep.data.label
+    // }
+    const temp = thirdPartyDependencies.filter( e => e.id === target);
+    console.log('temp', temp)
+    
+    const currentEdgeTargetName = (temp.length > 0) ? temp[0].data.label.props.children : '';
+
+    if (currentEdgeTargetName in thirdPartyDuplicates) {
+      console.log('old edge', edge)
+      if (target !== thirdPartyDuplicates[currentEdgeTargetName][0]) thirdPartiesToDeleteIds.push(target);
+      newTarget = thirdPartyDuplicates[currentEdgeTargetName][0];
+      const newEdge = {...edge, target: newTarget}
+      console.log('newEdge', newEdge);
+      return newEdge;
+    } 
+    return edge;
+
+  })
+
+  // Delete shared deps in thirdPartyDependencies
+  thirdPartiesToDeleteIds = [...new Set(thirdPartiesToDeleteIds)]
+  const newThirdPartyDeps = thirdPartyDependencies.filter(obj => !thirdPartiesToDeleteIds.includes(obj.id));
+  console.log('thirdPartyDespToDelete', thirdPartiesToDeleteIds)
+  console.log('old thirdPartyDependencies', thirdPartyDependencies)
+  console.log('newThirdPartyDeps', newThirdPartyDeps);
+  return {
+    localDependencies: localDependencies,
+    thirdPartyDependencies: newThirdPartyDeps,
+    edges: edges
+  }
+}
+
 const preprocess = (input) => {
     if (input.default === true) return [];
     const arrayOfModules = input.modules;
     const nodes = [];
+    const thirds = [];
     const edges = [];
     const sources = [];
     const position = {x: 0, y: 0};
@@ -87,11 +105,12 @@ const preprocess = (input) => {
             modules[resolved] = {module: module, dependencyType: dependencyTypes[0]};
             const newEdge = {
                 id: `e${i}-${sources.indexOf(resolved)}`,
-                source: i,
-                target: sources.indexOf(resolved),
+                source: String(i),
+                target: String(sources.indexOf(resolved)),
                 arrowHeadType: 'arrowclosed',
                 // animated: handleAnimated(modules[resolved].dependencyType),
-                // animated: false 
+                animated: false,
+                style: handleEdgeStyle(dependencyTypes[0]),
                 type: handleEdgeType(dependencyTypes[0])
             }
             // if (newEdge.type === "straight") edges.push(newEdge);
@@ -103,36 +122,36 @@ const preprocess = (input) => {
     arrayOfModules.forEach((mod,i) => {
         const {source, dependencies} = mod;
         const newNode = {
-            id: i,
+            id: String(i),
             type: 'input',
             data: {
                 label: (
                     <>
-                        {`${i} -- ${modules[source].module}`}
+                        {/* {`${i} -- ${modules[source].module}`} */}
+                        {`${modules[source].module}`}
                     </>
-                )
+                ),
+                onChange: console.log('hello')
             },
             style: {background: handleNodeColor(modules[source].dependencyType)},
             position: position,
-            targetPosition: 'bottom'
+            sourcePosition: modules[source].dependencyType === 'root' ? 'bottom' : 'top',
+            targetPosition: modules[source].dependencyType === 'root' ? 'bottom' : 'top',
+            dependencyType: modules[source].dependencyType
         };
-        nodes.push(newNode);
+        modules[source].dependencyType === 'root' || modules[source].dependencyType === 'local' ?  nodes.push(newNode) : thirds.push(newNode);
     })
 
-    return [...nodes, ...edges];
+    let elementsObj =  {
+        localDependencies: nodes,
+        thirdPartyDependencies: thirds,
+        edges: edges
+    }
+
+    // return refactorNodesForSharedDeps(elementsObj);
+    return elementsObj;
 }
 
-// {
-//   id: "root",
-//   properties: { "elk.direction": "RIGHT" },
-//   children: [
-//     { id: "n1", width: 10, height: 10 },
-//     { id: "n2", width: 10, height: 10 }
-//   ],
-//   edges: [{
-//     id: "e1", sources: [ "n1" ], targets: [ "n2" ]
-//   }]
-// }
 const preprocessDepCruiserResultsToELKJson = (input) => {
     if (input.default === true) return [];
     const arrayOfModules = input.modules;
