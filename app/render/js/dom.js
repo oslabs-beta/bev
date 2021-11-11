@@ -46,7 +46,7 @@ exports.displayFolders = ( folders = [] ) => {
 			folderListElem.appendChild( itemDomElem );
 	} );
 
-	// Logic to tone up or down the 'Analyze Dependencies' button based on if folders have been selected
+	// Logic to disable the 'Analyze Dependencies' button based on if folders have been selected
 	!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
 };
 
@@ -57,7 +57,6 @@ window.analyzeDep = function () {
 
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
 		//change the value of a dom element.
-		console.log('RESULTS SENT FROM THE BACKEND ', results);
 		const trigger = document.getElementById('trigger');
 		trigger.value = results;
 		trigger.click();
