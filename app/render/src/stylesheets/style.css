@@ -11,7 +11,7 @@ body {
 	display: grid;
 	grid-template-columns: 1fr minmax(auto, 9fr) 1fr;
 	grid-template-rows: 1fr 10fr;
-	background-color: rgb(248, 248, 239);
+	background-color: #F7EBE8;
 	padding: 0;
 	margin: 0;
 }
@@ -26,17 +26,19 @@ button {
 	padding: 6px 12px;
 	font-size: 12px;
 	text-transform: uppercase;
-	background-color: rgb(247, 172, 137);
-	color: #fff;
+	background-color: #FFA987;
+	color: #1E1E24;
 	border-radius: 2em;
 	overflow: hidden;
 	cursor: pointer;
 	margin: 2em 0.5em;
+	opacity: 80%;
 }
 
 button:hover{
-	background-color:rgb(242, 119, 130);
-	color: rgb(107, 83, 96);
+	background-color: #E54B4B;
+	color: #F7EBE8;
+	opacity: 100%;
 }
 
 /* NavBar features */
@@ -47,7 +49,7 @@ nav {
 	z-index: 5;
 	width: 100%;
 	height: 5em;
-	background: rgb(130, 178, 159);
+	background: #1D3557;
 	color: white;
 	font-family: 'Roboto', sans-serif;
 	font-weight: bold;
@@ -64,7 +66,7 @@ h1 {
 	justify-content: center;
 	align-items: center;
 	font-family: 'Josefin Sans', sans-serif;
-	color: rgb(150, 133, 211);
+	color: #fff;
 	margin: 0.4em;
 }
 
@@ -83,8 +85,8 @@ nav ul li {
 	margin: 0.7em;
 	width: 5em;
 	height: 2em;
-	background: rgb(247, 172, 137);
-	color: #fff;
+	background: #FFA987;
+	color: #1E1E24;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -98,8 +100,8 @@ nav ul li {
 
 nav ul li:hover{
 	font-weight: bold;
-	background-color:rgb(242, 119, 130);
-	color: rgb(107, 83, 96);
+	background-color: #E54B4B;
+	color: #F7EBE8;
 	box-sizing: border-box;
 	cursor: pointer;
 }
@@ -161,8 +163,8 @@ nav ul li a:active{
 .folders {
 	flex: 0 0 auto;
 	width: 50vw;
-	background-color: rgb(222, 216, 231);
-	color: rgb(107, 83, 96);
+	background-color: #cde5e6;
+	color: #1D3557;
 	padding: 20px;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -189,7 +191,7 @@ nav ul li a:active{
 	margin: 0; }
 	.app__files__item__info__size {
 		font-size: 12px;
-		color: rgb(107, 83, 96);
+		color: #1D3557;
 		margin: .2em 0;
 }
 
@@ -217,11 +219,17 @@ img {
 	opacity: 80%;
 	box-shadow: 0 0 0.2em darkgrey;
 }
+.react-flow__controls:hover {
+	opacity: 100%;
+}
 
 .react-flow__minimap {
 	opacity: 80%;
 	box-shadow: 0 0 0.2em darkgrey;
 	border-radius: 0.5em;
+}
+.react-flow__minimap:hover {
+	opacity: 100%;
 }
 
 .controls {
