@@ -9,6 +9,9 @@ ipcRenderer.invoke( 'app:get-folders' ).then( ( folders = [] ) => {
     dom.displayFolders( folders );
 } );
 
+
+console.log('Renderer IS RAN');
+
 // Handle file delete event
 // ipcRenderer.on( 'app:delete-file', ( event, filename ) => {
 //     document.getElementById( filename ).remove();
