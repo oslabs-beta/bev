@@ -1,5 +1,9 @@
 const { Notification } = require( 'electron' );
 
+/*
+Using native electron methods to send user notifications about completed processes
+*/
+
 // Display files added notification
 exports.foldersAdded = ( size ) => {
     const notif = new Notification( {
