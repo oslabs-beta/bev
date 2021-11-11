@@ -1,37 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Cabin&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Love+Ya+Like+A+Sister&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Birthstone+Bounce:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Josefin+Sans:wght@700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap');
 
 body {
-	background-color: #eee;
+	background-color: rgb(254, 251, 204);
 	font-family: "Lato", sans-serif;
 	font-size: 14px;
 	padding: 0;
 	margin: 0;
-}
-
-h2 {
-	padding: 0px;
-	margin: 5px;
-}
-
-h3 {
-	font-family: 'Press Start 2P', cursive;
-	font-size: 1.8em;
-	color:rgb(0, 255, 179);
-}
-
-h4 {
-	font-family: 'Press Start 2P', cursive;
-	font-size: 1.5em;
-	color:rgb(0, 255, 179);
-}
-
-h5 {
-	font-family: 'Press Start 2P', cursive;
-	font-size: 1.2em;
-	color:rgb(0, 255, 179);
 }
 
 button {
@@ -40,7 +14,7 @@ button {
 		  padding: 6px 12px;
 		  font-size: 12px;
 		  text-transform: uppercase;
-		  background-color: #d056e6;
+		  background-color: rgb(254, 201, 176);
 		  color: #fff;
 		  border-radius: 3px;
 		  overflow: hidden;
@@ -48,8 +22,8 @@ button {
 }
 
 button:hover{
-	background-color:rgb(0, 255, 179);
-	color: black;
+	background-color:rgb(242, 119, 130);
+	color: rgb(107, 83, 96);
 }
 
 .button_container{
@@ -64,7 +38,7 @@ nav {
 	z-index: 5;
 	width: 100%;
 	height: 5em;
-	background:black;
+	background: rgb(130, 178, 159);
 	color: white;
 	font-family: 'Roboto', sans-serif;
 	font-weight: bold;
@@ -87,18 +61,18 @@ nav ul {
 h1 {
 	display: flex;
 	flex-direction: row;
-	font-size: 1.8em;
+	font-size: 3em;
 	justify-content: center;
 	align-items: center;
-	font-family: 'Birthstone Bounce', cursive;
-	color:rgb(0, 255, 179);
+	font-family: 'Josefin Sans', sans-serif;
+	color: rgb(150, 133, 211);
 }
 
 nav ul li {
-	margin: 0px 5px 0px 5px;
+	margin: 0px 5px;
 	width: 100px;
 	height: 20px;
-	background: black;
+	background: rgb(254, 201, 176);
 	color: white;
 	display: flex;
 	justify-content: space-around;
@@ -109,8 +83,10 @@ nav ul li {
 }
 
 nav ul li:hover{
-	border: 1px solid white;
+	/* border: 1px solid white; */
 	font-weight: bold;
+	background-color:rgb(242, 119, 130);
+	color: rgb(107, 83, 96);
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 	box-sizing: border-box; 
@@ -118,7 +94,7 @@ nav ul li:hover{
 
 
 nav ul li a:active{
-	color: gray;
+	color: rgb(254, 251, 204);
 	text-decoration: none;
 }
 
@@ -193,7 +169,7 @@ nav ul li a:active{
 	padding: 6px 12px;
 	font-size: 12px;
 	text-transform: uppercase;
-	background-color: #d056e6;
+	background-color: rgb(254, 201, 176);
 	color: #fff;
 	border-radius: 3px;
 	overflow: hidden;
@@ -201,14 +177,15 @@ nav ul li a:active{
 }
 
 .uploader__button:hover{
-	background-color:rgb(0, 255, 179);
-	color: black;
+	background-color:rgb(242, 119, 130);
+	color: rgb(107, 83, 96);
 }
 
 .folders {
 	flex: 0 0 auto;
 	width: 50vw;
 	background-color: #ddd;
+	color: rgb(107, 83, 96);
 	padding: 20px;
 	overflow-x: hidden;
 	overflow-y: auto; 
@@ -238,7 +215,7 @@ nav ul li a:active{
 	margin: 0; }
 	.app__files__item__info__size {
 	font-size: 12px;
-	color: #666;
+	color: rgb(107, 83, 96);
 	margin: 0; 
 }
 .app__files__item__delete {
