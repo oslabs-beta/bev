@@ -83,7 +83,7 @@ exports.generateDependencyObject = (folderArr) =>{
 	const cruiseOptions = {
 		includeOnly: ["src", "assets", "node_modules"],
 		exclude: {
-			path: ["release", "public"]
+			path: ["release", "public", "dist"]
 		},
 		doNotFollow: {
 			"path": "node_modules",
