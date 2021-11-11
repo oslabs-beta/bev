@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Diagram from './Diagram';
+
 const Main = (props) =>{
 	const results = React.createRef();
-	console.log('props from Main.jsx', props)
 
 	const updateState = (e) => {
-		// Access `results.json` from the local machine
+		// Access json generated
 		props.setState(JSON.parse(e.target.value));
 	};
+
 
 	return (
 		<>

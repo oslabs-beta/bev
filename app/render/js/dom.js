@@ -23,7 +23,9 @@ window.deleteFolder = function ( itemId ) {
 	// Send event to the main thread
 	ipcRenderer.invoke( 'app:on-folder-delete', { id: itemId, folderpath } )
 		.then(folders => {
-			!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
+			const analyzeButton = document.getElementById('anal-button');
+			console.log('FOLDERS AFTER DELETE ', folders[0]);
+			folders[0] ? analyzeButton.disabled = false : analyzeButton.disabled = true;
 		}
 	);	
 };
@@ -46,7 +48,8 @@ exports.displayFolders = ( folders = [] ) => {
 			folderListElem.appendChild( itemDomElem );
 	} );
 
-	// Logic to disable the 'Analyze Dependencies' button based on if folders have been selected
+	const analyzeButton = document.getElementById('anal-button');
+	// Logic to tone up or down the 'Analyze Dependencies' button based on if folders have been selected
 	!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
 };
 
@@ -64,12 +67,3 @@ window.analyzeDep = function () {
 
 };
 
-// Create an analyze button which has access to the analyzeDep function
-// Append it below the folder display area (see app/src/components/Main.jsx)
-const analyzeButton = document.createElement('button');
-analyzeButton.setAttribute('onclick', 'analyzeDep()');
-// Disabled by default, but will be removed if displayFolders is invoked and populates its array
-analyzeButton.disabled = true;
-analyzeButton.innerText = 'Analyze Dependencies';
-const analyzeDiv = document.getElementById('analyze-button');
-analyzeDiv.appendChild(analyzeButton);

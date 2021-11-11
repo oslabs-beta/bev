@@ -73,7 +73,9 @@ ipcMain.handle( 'app:on-fs-dialog-open', async ( event ) => {
 // Listen to folder delete event
 ipcMain.handle( 'app:on-folder-delete', ( event, folder ) => {
 	io.deleteFolder( folder.folderpath );
-	return folder;
+    const folders = io.getFolders();
+    console.log('FOLDERS AFTER DELETE IN HANDLE : ', folders);
+	return folders;
 } );
 
 // Listen to folder open event
