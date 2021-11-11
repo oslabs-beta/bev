@@ -60,7 +60,6 @@ window.analyzeDep = function () {
 
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
 		//change the value of a dom element.
-		console.log('RESULTS SENT FROM THE BACKEND ', results);
 		const trigger = document.getElementById('trigger');
 		trigger.value = results;
 		trigger.click();
