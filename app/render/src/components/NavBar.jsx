@@ -8,7 +8,7 @@ const NavBar = (props) =>{
             <h1 className='title'>BEV</h1>
             <ul>
             <Routes>
-					<Route path="/chart"  element={<li onClick={() => navigate(-1)}>Back</li>} />
+					<Route path="/chart"  element={<li onClick={() => navigate('../')}>Back</li>} />
 			</Routes>
             </ul>
         </nav>
