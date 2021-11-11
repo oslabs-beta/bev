@@ -1,12 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Josefin+Sans:wght@700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap');
 
-* { font-family: Roboto, sans-serif; font-size: 14px;}
+* {
+	font-family: Roboto, sans-serif;
+	font-size: 14px;
+	box-sizing: border-box;
+}
 
+/* Major global changes */
 body {
 	display: grid;
 	grid-template-columns: 1fr minmax(auto, 9fr) 1fr;
 	grid-template-rows: 1fr 10fr;
-	background-color: rgb(254, 251, 204);
+	background-color: rgb(248, 248, 239);
 	padding: 0;
 	margin: 0;
 }
@@ -21,12 +26,12 @@ button {
 	padding: 6px 12px;
 	font-size: 12px;
 	text-transform: uppercase;
-	background-color: rgb(254, 201, 176);
+	background-color: rgb(247, 172, 137);
 	color: #fff;
 	border-radius: 2em;
 	overflow: hidden;
 	cursor: pointer;
-	margin: 2em .5em;
+	margin: 2em 0.5em;
 }
 
 button:hover{
@@ -34,14 +39,7 @@ button:hover{
 	color: rgb(107, 83, 96);
 }
 
-.button_container{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	overflow: hidden; 
-	padding: 10px;
-}
-
+/* NavBar features */
 nav {
 	display: grid;
 	grid-row: 1;
@@ -59,6 +57,18 @@ nav {
 	position: absolute;
 }
 
+h1 {
+	display: grid;
+	grid-row: inherit;
+	font-size: 3em;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Josefin Sans', sans-serif;
+	color: rgb(150, 133, 211);
+	margin: 0.4em;
+}
+
+/* NavBar settings */
 nav ul {
 	top: 0em;
 	position: absolute;
@@ -69,51 +79,39 @@ nav ul {
 	align-items: flex-end;
 }
 
-h1 {
-	/* display: flex;
-	flex-direction: row; */
-	display: grid;
-	grid-row: inherit;
-	font-size: 3em;
+nav ul li {
+	margin: 0.7em;
+	width: 5em;
+	height: 2em;
+	background: rgb(247, 172, 137);
+	color: #fff;
+	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-family: 'Josefin Sans', sans-serif;
-	color: rgb(150, 133, 211);
-	margin: .4em;
-}
-
-nav ul li {
-	margin: .7em;
-	width: 5em;
-	height: 1.3em;
-	background: rgb(254, 201, 176);
-	color: white;
-	display: flex;
-	justify-content: space-around;
 	text-decoration: none;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 	box-sizing: border-box;
 	border-radius: 2em;
+	font-family: Roboto, sans-serif;
+	font-size: 12px;
+	text-transform: uppercase;
 }
 
 nav ul li:hover{
-	/* border: 1px solid white; */
 	font-weight: bold;
 	background-color:rgb(242, 119, 130);
 	color: rgb(107, 83, 96);
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
-	box-sizing: border-box; 
+	box-sizing: border-box;
+	cursor: pointer;
 }
-
 
 nav ul li a:active{
 	color: rgb(254, 251, 204);
 	text-decoration: none;
 }
 
+/* Class-specific styles */
 
+/* main div which all other items render within */
 .container {
 	top: 5em;
 	position: absolute;
@@ -121,28 +119,9 @@ nav ul li a:active{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
 }
 
-* { box-sizing: border-box; }
-  
-.app {
-	width: 100vw;
-	height: 100vh;
-	display: flex; 
-}
-
-.app__uploader {
-	flex: 0 0 auto;
-	width: 50vw;
-	display: flex;
-	flex-direction: column; 
-}
-
-.app__uploader--activate {
-	opacity: 0.5; 
-}
-
+/* click to add folders uploader button */
 .uploader__icon-area {
 	flex: 1 1 auto;
 	display: flex;
@@ -174,32 +153,27 @@ nav ul li a:active{
 	padding: 6px 12px;
 	font-size: 12px;
 	text-transform: uppercase;
-	background-color: rgb(254, 201, 176);
-	color: #fff;
 	overflow: hidden;
 	cursor: pointer; 
 }
 
-.uploader__button:hover{
-	background-color:rgb(242, 119, 130);
-	color: rgb(107, 83, 96);
-}
-
+/* folders display */
 .folders {
 	flex: 0 0 auto;
 	width: 50vw;
-	background-color: #ddd;
+	background-color: rgb(222, 216, 231);
 	color: rgb(107, 83, 96);
 	padding: 20px;
 	overflow-x: hidden;
-	overflow-y: auto; 
+	overflow-y: auto;
 }
 
 .app__folders__item {
 	display: flex;
 	align-items: center;
 	overflow: hidden;
-	margin: .5em;
+	margin: .5em 0;
+	padding: .2em .5em;
 }
 
 .app__files__item__info {
@@ -209,28 +183,28 @@ nav ul li a:active{
 }
 
 .app__files__item__info__name {
-	font-size: 14px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	margin: 0; }
 	.app__files__item__info__size {
-	font-size: 12px;
-	color: rgb(107, 83, 96);
-	margin: 0; 
+		font-size: 12px;
+		color: rgb(107, 83, 96);
+		margin: .2em 0;
 }
 
-.app__files__item__file, .app__files__item__delete, .app__files__item__open {
+img {
 	flex: 0 0 auto;
 	width: 16px;
-	margin: 0 .3em;
+	margin: 0 .2em;
 	cursor: pointer; 
 }
 
 .app__files__item:not(:last-child) {
 	margin-bottom: 20px; 
 }
-  
+
+/* diagram features */
 .react-flow-fix {
 	position: unset !important;
 }
@@ -241,6 +215,13 @@ nav ul li a:active{
 
 .react-flow__controls {
 	opacity: 80%;
+	box-shadow: 0 0 0.2em darkgrey;
+}
+
+.react-flow__minimap {
+	opacity: 80%;
+	box-shadow: 0 0 0.2em darkgrey;
+	border-radius: 0.5em;
 }
 
 .controls {
@@ -251,8 +232,4 @@ nav ul li a:active{
 	width: 100%;
 	align-items: center;
 	display: inline-flex;
-}
-
-#folderlist {
-	border-radius: 2em;
 }
