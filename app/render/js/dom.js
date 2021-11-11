@@ -18,11 +18,14 @@ window.deleteFolder = function ( itemId ) {
 	// Get path of the file
 	const itemNode = document.getElementById( itemId );
 	const folderpath = itemNode.getAttribute( 'data-folderpath' );
+	const removeNode = document.getElementById( itemId );
+	removeNode.remove();
 	// Send event to the main thread
 	ipcRenderer.invoke( 'app:on-folder-delete', { id: itemId, folderpath } )
-		.then(folder => {
-			const removeNode = document.getElementById( folder.id );
-			removeNode.remove();
+		.then(folders => {
+			const analyzeButton = document.getElementById('anal-button');
+			console.log('FOLDERS AFTER DELETE ', folders[0]);
+			folders[0] ? analyzeButton.disabled = false : analyzeButton.disabled = true;
 		}
 	);	
 };
@@ -45,6 +48,7 @@ exports.displayFolders = ( folders = [] ) => {
 			folderListElem.appendChild( itemDomElem );
 	} );
 
+	const analyzeButton = document.getElementById('anal-button');
 	// Logic to tone up or down the 'Analyze Dependencies' button based on if folders have been selected
 	!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
 };
@@ -56,19 +60,10 @@ window.analyzeDep = function () {
 
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
 		//change the value of a dom element.
-		console.log('RESULTS SENT FROM THE BACKEND ', results);
 		const trigger = document.getElementById('trigger');
 		trigger.value = results;
+		trigger.click();
 	});
 
 };
 
-// Create an analyze button which has access to the analyzeDep function
-// Append it below the folder display area (see app/src/components/Main.jsx)
-const analyzeButton = document.createElement('button');
-analyzeButton.setAttribute('onclick', 'analyzeDep()');
-// Disabled by default, but will be removed if displayFolders is invoked and populates its array
-analyzeButton.disabled = true;
-analyzeButton.innerText = 'Analyze Dependencies';
-const analyzeDiv = document.getElementById('analyze-button');
-analyzeDiv.appendChild(analyzeButton);

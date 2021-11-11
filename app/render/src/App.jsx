@@ -7,26 +7,25 @@ import {
 import './stylesheets/style.css';
 import Main from './components/Main';
 import Diagram from './components/Diagram';
-import Diagram2 from './components/Diagram2';
 import NavBar from './components/NavBar';
 
+/*
+Implemented react-router based on react-router v6 which introduced braking changes
+*/
 const App = () => {
 	const [state, setState] = useState({default: true});
 
-
-	// let route =  [<><Main /> <button id="trigger" value="" onClick={(e)=>updateState(e)} /></>]
-
-	// if(page.current === 'chart' ){
-	// 	route = [<><div><Diagram resultsElements={state}/></div></>];
-	// } 
-
 	return (
 		<HashRouter>
-			<div className='container'>
+			<div >
 				<NavBar />
 				<Routes>
 					<Route path="/" element={<Main setState={setState} />} />
-					<Route path="/chart"  element={<Diagram resultElements={state} />} />
+					{/* 
+					/chart is being passed a component Diagram which is being passed resultsElement as the property;
+					resultsElement contains the results.json file that we use to generate the graph
+					 */}
+					<Route path="/chart" element={<Diagram resultElements={state} />} />
 				</Routes>
 			</div>
 		</HashRouter>
