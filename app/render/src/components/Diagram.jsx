@@ -69,6 +69,10 @@ const onLoad = (reactFlowInstance) => {
   reactFlowInstance.fitView();
 };
 
+/* 
+This function leverages react-flow methods to render the diagram after
+receiving the preprocessed elements from the dagre library
+*/ 
 const Diagram = ({ resultElements }) => {
   console.log('resultElements', resultElements); // This works!
   const nodes = getLayoutedElements(preprocess(resultElements));
