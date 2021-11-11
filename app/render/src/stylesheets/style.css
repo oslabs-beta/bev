@@ -17,7 +17,7 @@ body {
 }
 
 div {
-	border-radius: 1em !important;
+	border-radius: 0.5em !important;
 }
 
 button {
@@ -28,7 +28,7 @@ button {
 	text-transform: uppercase;
 	background-color: #FFA987;
 	color: #1E1E24;
-	border-radius: 2em;
+	border-radius: 0.5em;
 	overflow: hidden;
 	cursor: pointer;
 	margin: 2em 0.5em;
@@ -92,7 +92,7 @@ nav ul li {
 	align-items: center;
 	text-decoration: none;
 	box-sizing: border-box;
-	border-radius: 2em;
+	border-radius: 0.5em;
 	font-family: Roboto, sans-serif;
 	font-size: 12px;
 	text-transform: uppercase;
