@@ -10,6 +10,11 @@ const openWindow = () => {
         width: 1000,
         height: 700,
         webPreferences: {
+            /*
+            by default, electron's renderer process does not have access to node.js (and file system) methods as a security measure;
+            in order to be able to access files from the renderer process, like how we grabbed the user's folders, we need to set nodeIntegration to true;
+            newer builds of electron also require contextIsolation to be set to false for nodeIntegration to work
+            */
             nodeIntegration: true,
             devTools: true,
             contextIsolation: false
@@ -29,7 +34,7 @@ app.on( 'ready', () => {
     // Watch files
     // It looks for changes in the file and that's probably how it sends notifications
     // If a file is created or deleted, then send notif
-    io.watchFiles( win );
+    // io.watchFiles( win );
 } );
 
 // When all windows are closed, quit the app
@@ -46,6 +51,11 @@ app.on( 'activate', () => {
     }
 } );
 
+/*
+The following ipcMain are analogous to controllers in express;
+They listen for a "route" sent from the ipcRenderer process and call the corresponding middleware;
+*/
+
 // Return list of folders
 ipcMain.handle( 'app:get-folders', () => {
     return io.getFolders();
@@ -53,11 +63,9 @@ ipcMain.handle( 'app:get-folders', () => {
 
 // Open filesystem dialog to choose files
 ipcMain.handle( 'app:on-fs-dialog-open', async ( event ) => {
-    console.log('click handler triggered!')
     const folder = dialog.showOpenDialogSync( {
         properties: [ 'openDirectory', 'multiSelections' ],
     } );
-
 	if(folder) io.addFolders(folder);
     return io.getFolders();
 } );
@@ -65,7 +73,9 @@ ipcMain.handle( 'app:on-fs-dialog-open', async ( event ) => {
 // Listen to folder delete event
 ipcMain.handle( 'app:on-folder-delete', ( event, folder ) => {
 	io.deleteFolder( folder.folderpath );
-	return folder;
+    const folders = io.getFolders();
+    console.log('FOLDERS AFTER DELETE IN HANDLE : ', folders);
+	return folders;
 } );
 
 // Listen to folder open event
@@ -76,6 +86,5 @@ ipcMain.on( 'app:on-folder-open', ( event, folder ) => {
 // Listen to analyze dependencies event
 ipcMain.handle( 'app:on-analyze', ( event, folders ) => {
 	const results = io.generateDependencyObject(folders);
-    console.log('RESULTS IN THE BACKEND ', results);
 	return results;
 } );

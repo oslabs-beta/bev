@@ -1,5 +1,6 @@
 const { ipcRenderer } = require( 'electron' );
 const path = require('path');
+const { Link } = require('react-router-dom');
 
 // Open folder
 window.openFolder = function ( itemId ) {
@@ -14,43 +15,24 @@ window.openFolder = function ( itemId ) {
 
 // Delete folder from folders.json
 window.deleteFolder = function ( itemId ) {
-
 	// Get path of the file
 	const itemNode = document.getElementById( itemId );
 	const folderpath = itemNode.getAttribute( 'data-folderpath' );
+	const removeNode = document.getElementById( itemId );
+	removeNode.remove();
 	// Send event to the main thread
 	ipcRenderer.invoke( 'app:on-folder-delete', { id: itemId, folderpath } )
-		.then(folder => {
-			const removeNode = document.getElementById( folder.id );
-			removeNode.remove();
-		});
-};
-
-window.analyzeDep = function () {
-	const folderNodes = document.getElementsByClassName('app__folders__item');
-	const folderObjs = Array.from(folderNodes);
-	const folders = folderObjs.map( node => node.getAttribute('data-folderpath'))
-
-	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
-		//change the value of a dom element.
-		console.log('RESULTS SENT FROM THE BACKEND ', results);
-		const trigger = document.getElementById('trigger');
-		trigger.value = results;
-	});
+		.then(folders => {
+			const analyzeButton = document.getElementById('anal-button');
+			console.log('FOLDERS AFTER DELETE ', folders[0]);
+			folders[0] ? analyzeButton.disabled = false : analyzeButton.disabled = true;
+		}
+	);	
 };
 
 exports.displayFolders = ( folders = [] ) => {
 	const folderListElem = document.getElementById( 'folderlist' );
 	folderListElem.innerHTML = '';
-
-	const analyzeButton = document.createElement('button');
-	analyzeButton.setAttribute('onclick', 'analyzeDep()');
-	analyzeButton.innerText = 'Analyze Dependencies';
-
-	const divElem = document.createElement( 'div' );
-	divElem.setAttribute( 'class', 'button_container' );
-	divElem.appendChild( analyzeButton );
-	folderListElem.appendChild( divElem );
 
 	folders.forEach( (folder, index) => {
 			const itemDomElem = document.createElement( 'div' );
@@ -66,4 +48,22 @@ exports.displayFolders = ( folders = [] ) => {
 			folderListElem.appendChild( itemDomElem );
 	} );
 
+	const analyzeButton = document.getElementById('anal-button');
+	// Logic to tone up or down the 'Analyze Dependencies' button based on if folders have been selected
+	!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
 };
+
+window.analyzeDep = function () {
+	const folderNodes = document.getElementsByClassName('app__folders__item');
+	const folderObjs = Array.from(folderNodes);
+	const folders = folderObjs.map( node => node.getAttribute('data-folderpath'))
+
+	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
+		//change the value of a dom element.
+		const trigger = document.getElementById('trigger');
+		trigger.value = results;
+		trigger.click();
+	});
+
+};
+
