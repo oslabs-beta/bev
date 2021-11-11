@@ -19,8 +19,8 @@ const nodeWidth = 150;
 const nodeHeight = 50;
 let lowestLocalYPosition = 0;
 let lowestLocalXPosition = 0;
-const getLayoutedElements = (elements, direction = 'TB') => {
-  const isHorizontal = direction === 'LR';
+const getLayoutedElements = (elements, direction = 'LR') => {
+  // const isHorizontal = direction === 'LR';
   // dagre library changes the direction of the chart?
   dagreGraph.setGraph({ rankdir: direction });
   // const localEdges = elements.edges.filter(e => e.type === 'local' || e.type === 'root');
@@ -70,13 +70,16 @@ const setThirdPartyDepPositions = (elements) => {
       dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
       const nodeWithPosition = dagreGraph.node(el.id);
       console.log('3rd-party nodeWithPosition', nodeWithPosition);
-      el.targetPosition = 'bottom';
-      el.sourcePosition = 'top';
+      // el.targetPosition = 'bottom';
+      // el.sourcePosition = 'top';
+      el.targetPosition = 'right';
+      el.sourcePosition = 'left';
       el.position = {
-        // x: nodeWithPosition.width - nodeWidth / 1.5 + Math.random() / 1000,
-        // y: nodeWithPosition.height - nodeHeight / 1.5 + lowestLocalYPosition,
-        x: nodeWithPosition.width - (nodeWidth * (index+1))  + Math.random() / 1000 + lowestLocalXPosition,
-        y: nodeWithPosition.height - nodeHeight / 1.5 + lowestLocalYPosition + (2*nodeHeight),
+
+        // x: nodeWithPosition.width - (nodeWidth * (index+1))  + Math.random() / 1000 + lowestLocalXPosition,
+        // y: nodeWithPosition.height - nodeHeight / 1.5 + lowestLocalYPosition + (2*nodeHeight),
+        y: nodeWithPosition.width - (nodeWidth * (index+1))/1.5  + Math.random() / 1000 + lowestLocalYPosition,
+        x: nodeWithPosition.height - nodeHeight + lowestLocalXPosition + (2*nodeHeight) + nodeWidth,
       };
       console.log('3rd-party node', el);
     }
@@ -139,8 +142,8 @@ const Diagram = ({ resultElements }) => {
   return (
     <>
       <div id="controls" className="controls">
-        <button onClick={() => onLayout('TB')}>vertical layout</button>
-        <button onClick={() => onLayout('LR')}>horizontal layout</button>
+        {/* <button onClick={() => onLayout('TB')}>vertical layout</button>
+        <button onClick={() => onLayout('LR')}>horizontal layout</button> */}
       </div>
       <ReactFlow
         elements={elements}
