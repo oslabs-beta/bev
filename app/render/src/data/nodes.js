@@ -135,8 +135,10 @@ const preprocess = (input) => {
             },
             style: {background: handleNodeColor(modules[source].dependencyType)},
             position: position,
-            sourcePosition: modules[source].dependencyType === 'root' ? 'bottom' : 'top',
-            targetPosition: modules[source].dependencyType === 'root' ? 'bottom' : 'top',
+            // sourcePosition: modules[source].dependencyType === 'root' ? 'bottom' : 'top',
+            // targetPosition: modules[source].dependencyType === 'root' ? 'bottom' : 'top',
+            sourcePosition: modules[source].dependencyType === 'root' ? 'right' : 'left',
+            targetPosition: modules[source].dependencyType === 'root' ? 'right' : 'left',
             dependencyType: modules[source].dependencyType
         };
         modules[source].dependencyType === 'root' || modules[source].dependencyType === 'local' ?  nodes.push(newNode) : thirds.push(newNode);
