@@ -1,2 +1,2 @@
-# electron-lessons
-A sample Electron (JS) project for Medium lessons.
+# BEV -- A bird's-eye-view of your project's dependencies
+
