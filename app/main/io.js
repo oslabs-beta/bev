@@ -42,6 +42,11 @@ exports.addFolders = ( foldersArr = [] ) => {
 	// Parse to turn json obj into an array of folders
 	const folders = JSON.parse(foldersRaw);
 
+	//Check for any exisiting.
+	folders.forEach( folder=> {
+		if(foldersArr.indexOf(folder)>-1) foldersArr.splice(foldersArr.indexOf(folder), 1);
+	})
+
 	// Write into folders.json with the foldersArr concat to the original array of folders
 	fs.writeFileSync(path.resolve(appDir, folderName), JSON.stringify(folders.concat(foldersArr)));
 

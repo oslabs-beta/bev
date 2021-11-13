@@ -7,6 +7,7 @@ const Main = (props) =>{
 	const updateState = (e) => {
 		// Access json generated
 		props.setState(JSON.parse(e.target.value));
+		
 	};
 
 
