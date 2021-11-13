@@ -8,28 +8,28 @@ import ReactFlow, {
   Background,
   isNode,
 } from 'react-flow-renderer';
-import { preprocess, exampleData } from '../data/nodes';
+import { mapDepCruiserJSONToReactFlowElements, exampleData } from '../data/nodes';
 // import { useAsync } from 'react-use';
 import dagre from 'dagre';
 
-const dagreGraph = new dagre.graphlib.Graph();
+let dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
 const nodeWidth = 150;
 const nodeHeight = 50;
 let lowestLocalYPosition = 0;
-let lowestLocalXPosition = 0;
-const getLayoutedElements = (elements, direction = 'LR') => {
-  // const isHorizontal = direction === 'LR';
-  // dagre library changes the direction of the chart?
+let maxLocalXPosition = 0;
+const repositionLocalNodes = (elements, direction = 'LR') => {
   dagreGraph.setGraph({ rankdir: direction });
-  // const localEdges = elements.edges.filter(e => e.type === 'local' || e.type === 'root');
   const localElements = [...elements.localDependencies, ...elements.edges];
 
-  // creates each element (node) with the correct edges
+  // Set up for dagreGraph object (setting nodes and edges)
+
   localElements.forEach((el) => {
     if (isNode(el)) {
+      console.log('node before invoking setNode', el)
       dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
+      console.log('node after invoking setNode', el)
     } else {
       dagreGraph.setEdge(el.source, el.target);
     }
@@ -40,26 +40,28 @@ const getLayoutedElements = (elements, direction = 'LR') => {
   localElements.forEach((el, index) => {
     if (isNode(el)) {
       const nodeWithPosition = dagreGraph.node(el.id);
-      // if isHorizontal is true, then assign the elements a different position based on orientation
-      // el.targetPosition = isHorizontal ? 'left' : 'bottom';
-      // el.sourcePosition = isHorizontal ? 'right' : 'top';
+     // // if isHorizontal is true, then assign the elements a different position based on orientation
+     // // el.targetPosition = isHorizontal ? 'left' : 'bottom';
+     // // el.sourcePosition = isHorizontal ? 'right' : 'top';
 
-      // el.targetPosition = 'top';
-      // el.sourcePosition = 'bottom';
+     // // el.targetPosition = 'top';
+     // // el.sourcePosition = 'bottom';
 
       el.position = {
         x: nodeWithPosition.x - nodeWidth / 1.5 + Math.random() / 1000,
         y: nodeWithPosition.y - nodeHeight / 1.5,
       };
-      console.log('el', el);
-      if (index === 0) lowestLocalYPosition = el.position.y, lowestLocalXPosition = el.position.x;
+      console.log('node after reposition', el);
+      if (index === 0) lowestLocalYPosition = el.position.y, maxLocalXPosition = el.position.x;
       if (lowestLocalYPosition < el.position.y) lowestLocalYPosition = el.position.y;
-      if (lowestLocalXPosition < el.position.x) lowestLocalXPosition = el.position.x;
+      if (maxLocalXPosition < el.position.x) maxLocalXPosition = el.position.x;
       output.push(el);
     }
   });
   return output;
 };
+
+// Returning third party nodes ONLY 
 const setThirdPartyDepPositions = (elements) => {
   console.log('lowestLocalYPosition', lowestLocalYPosition)
   const thirdPartyNodes = elements.thirdPartyDependencies;
@@ -76,10 +78,10 @@ const setThirdPartyDepPositions = (elements) => {
       el.sourcePosition = 'left';
       el.position = {
 
-        // x: nodeWithPosition.width - (nodeWidth * (index+1))  + Math.random() / 1000 + lowestLocalXPosition,
+        // x: nodeWithPosition.width - (nodeWidth * (index+1))  + Math.random() / 1000 + maxLocalXPosition,
         // y: nodeWithPosition.height - nodeHeight / 1.5 + lowestLocalYPosition + (2*nodeHeight),
         y: nodeWithPosition.width - (nodeWidth * (index+1))/1.5  + Math.random() / 1000 + lowestLocalYPosition,
-        x: nodeWithPosition.height - nodeHeight + lowestLocalXPosition + (2*nodeHeight) + nodeWidth,
+        x: nodeWithPosition.height - nodeHeight + maxLocalXPosition + (2*nodeHeight) + nodeWidth,
       };
       console.log('3rd-party node', el);
     }
@@ -97,23 +99,29 @@ const onLoad = (reactFlowInstance) => {
 
 let allNodesAndEdges;
 const mapToElements = (resultElements) => {
-  const preprocessedNodes = preprocess(resultElements);
-  const nodes = getLayoutedElements(preprocessedNodes);
-  const thirdPartyDepNodes = setThirdPartyDepPositions(preprocessedNodes);
+  console.log("MAPTOELEMENTS HAS BEEN TRIGGERED, initialDiagramLoad is FALSE")
+  const reactFlowElements = mapDepCruiserJSONToReactFlowElements(resultElements); 
+  const nodes = repositionLocalNodes(reactFlowElements); // setting local node positions, returning local nodes
+  const thirdPartyDepNodes = setThirdPartyDepPositions(reactFlowElements); // setting 3rd party node positions, returning 3rd party nodes
   // return [...nodes, ...thirdPartyDepNodes, ...preprocessedNodes.edges];
   return {
     localNodes: nodes,
     thirdPartyNodes: thirdPartyDepNodes,
-    edges: preprocessedNodes.edges
+    edges: reactFlowElements.edges
   }
 }
-let clicked = false;
+// let clicked = false;
+// let initialDiagramLoad = false;
 
-const Diagram = ({ resultElements }) => {
+const Diagram = ({ resultElements, initialDiagramLoad, setInitialDiagramLoad }) => {
   console.log('RESULTELEMENTS BEFORE PREPROCESS', resultElements)
   // if (!resultElements.hasOwnProperty('localNodes')) allNodesAndEdges = mapToElements(resultElements);
-  if (!clicked) allNodesAndEdges = mapToElements(resultElements);
-  const [elements, setElements]= useState(!clicked ? [...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...allNodesAndEdges.edges] : []);
+  if (!initialDiagramLoad) {
+    dagreGraph = new dagre.graphlib.Graph();
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
+    allNodesAndEdges = mapToElements(resultElements);
+  } 
+  const [elements, setElements]= useState(!initialDiagramLoad ? [...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...allNodesAndEdges.edges] : []);
   const [clickedElement, setClickedElement] = useState({});
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onConnect = (params) => setElements((els) => addEdge(params, els));
@@ -121,7 +129,7 @@ const Diagram = ({ resultElements }) => {
   useEffect(() => {
     console.log("useEffect triggered!")
     if (clickedElement.hasOwnProperty('id')) {
-      clicked = true;
+      setInitialDiagramLoad(true);
       console.log('if block triggered')
       const id = clickedElement.id;
       const newEdges = [];

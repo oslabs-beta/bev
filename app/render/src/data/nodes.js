@@ -82,7 +82,7 @@ const refactorNodesForSharedDeps = (elementsObj) => {
   }
 }
 
-const preprocess = (input) => {
+const mapDepCruiserJSONToReactFlowElements = (input) => {
     if (input.default === true) return [];
     const arrayOfModules = input.modules;
     const nodes = [];
@@ -291,4 +291,4 @@ const exampleData =  [
   },
 ];
 
-export {preprocess, preprocessDepCruiserResultsToELKJson, exampleData};
+export {mapDepCruiserJSONToReactFlowElements, preprocessDepCruiserResultsToELKJson, exampleData};
