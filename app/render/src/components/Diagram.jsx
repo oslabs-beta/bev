@@ -8,7 +8,7 @@ import ReactFlow, {
   Background,
   isNode,
 } from 'react-flow-renderer';
-import { mapDepCruiserJSONToReactFlowElements, exampleData } from '../data/nodes';
+import { mapDepCruiserJSONToReactFlowElements, LocalNodeComponent, DefaultNodeComponent } from '../data/nodes';
 // import { useAsync } from 'react-use';
 import dagre from 'dagre';
 
@@ -72,8 +72,6 @@ const setThirdPartyDepPositions = (elements) => {
       dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
       const nodeWithPosition = dagreGraph.node(el.id);
       console.log('3rd-party nodeWithPosition', nodeWithPosition);
-      // el.targetPosition = 'bottom';
-      // el.sourcePosition = 'top';
       el.targetPosition = 'right';
       el.sourcePosition = 'left';
       el.position = {
@@ -110,12 +108,10 @@ const mapToElements = (resultElements) => {
     edges: reactFlowElements.edges
   }
 }
-// let clicked = false;
-// let initialDiagramLoad = false;
 
-const Diagram = ({ resultElements, initialDiagramLoad, setInitialDiagramLoad }) => {
+const Diagram = ({ resultElements, bundleInfo, initialDiagramLoad, setInitialDiagramLoad }) => {
   console.log('RESULTELEMENTS BEFORE PREPROCESS', resultElements)
-  // if (!resultElements.hasOwnProperty('localNodes')) allNodesAndEdges = mapToElements(resultElements);
+  console.log('Bundle Info: ', bundleInfo);
   if (!initialDiagramLoad) {
     dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -125,7 +121,10 @@ const Diagram = ({ resultElements, initialDiagramLoad, setInitialDiagramLoad }) 
   const [clickedElement, setClickedElement] = useState({});
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onConnect = (params) => setElements((els) => addEdge(params, els));
-
+  const nodeTypes = {
+    local: LocalNodeComponent,
+    default: DefaultNodeComponent
+  }
   useEffect(() => {
     console.log("useEffect triggered!")
     if (clickedElement.hasOwnProperty('id')) {
@@ -150,12 +149,9 @@ const Diagram = ({ resultElements, initialDiagramLoad, setInitialDiagramLoad }) 
   return (
     <>
       <div id="controls" className="controls">
-        {/* <button onClick={() => onLayout('TB')}>vertical layout</button>
-        <button onClick={() => onLayout('LR')}>horizontal layout</button> */}
       </div>
       <ReactFlow
         elements={elements}
-        // onElementClick={(evt, emt) => onElementClick(evt, emt)}
         onElementClick={(evt, emt) => setClickedElement(emt)}
         onElementsRemove={onElementsRemove}
         onConnect={onConnect}
@@ -163,6 +159,7 @@ const Diagram = ({ resultElements, initialDiagramLoad, setInitialDiagramLoad }) 
         snapToGrid={true}
         snapGrid={[15, 15]}
         className="react-flow-fix"
+        nodeTypes={nodeTypes}
       >
         <MiniMap
           nodeStrokeColor={(n) => {
