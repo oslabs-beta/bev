@@ -5,6 +5,7 @@ const os = require( 'os' );
 const open = require( 'open' );
 const treeify = require('treeify');
 const {cruise} = require("dependency-cruiser");
+const {exec} = require("child_process");
 
 // Local dependencies
 const notification = require( './notification' );
@@ -85,9 +86,9 @@ exports.watchFiles = ( win ) => {
 exports.generateDependencyObject = (folderArr) =>{
 	const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE = folderArr;
 	const cruiseOptions = {
-		includeOnly: ["src", "assets", "node_modules"],
+		// includeOnly: ["src", "assets", "node_modules"],
 		exclude: {
-			path: ["release", "public", "dist"]
+			// path: ["release", "public", "dist"]
 		},
 		doNotFollow: {
 			"path": "node_modules",
@@ -108,7 +109,8 @@ exports.generateDependencyObject = (folderArr) =>{
 		);
 
 		// console.dir(cruiseResult, { depth: 20 });
-		json = JSON.stringify(cruiseResult.output);
+		// json = JSON.stringify(cruiseResult.output);
+		json = cruiseResult.output;
 
 		notification.resultsAdded( folderArr.length );
 		
@@ -120,4 +122,28 @@ exports.generateDependencyObject = (folderArr) =>{
 	// console.log('generated json file from io.js', json);
 	return json;
 
+}
+
+exports.generateBundleInfoObject = () =>{
+	const outputObj = {};
+	const rawStats = fs.readFileSync('stats.json');
+	const stats = JSON.parse(rawStats);
+	const {assets, modules} = stats;
+	const {size, name} = assets[0];
+	outputObj['assets'] = {
+		'name': name,
+		'size': size
+	}
+
+	outputObj['modules'] = [];
+	modules.forEach(module => {
+		const {size, name} = module;
+		outputObj['modules'].push({
+			'name': name,
+			'size': size
+		})
+	})
+
+	// return JSON.stringify(outputObj);
+	return outputObj;
 }
