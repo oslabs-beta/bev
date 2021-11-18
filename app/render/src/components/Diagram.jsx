@@ -6,8 +6,8 @@ import ReactFlow, {
   Controls,
   Background,
 } from 'react-flow-renderer';
-import { LocalNodeComponent, DefaultNodeComponent } from '../data/node-styling';
-import { mapToElements, allNodesAndEdges } from '../data/node-reposition'
+import { LocalNodeComponent, DefaultNodeComponent } from '../node-handling/styling';
+import { mapToElements, allNodesAndEdges } from '../node-handling/reposition'
 import dagre from 'dagre';
 
 // React flow props, independent of Diagram hooks

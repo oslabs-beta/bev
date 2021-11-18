@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleNodeColor, handleEdgeType, handleEdgeStyle } from './node-configs';
+import { handleNodeColor, handleEdgeType, handleEdgeStyle } from './configs';
 
 const refactorNodesForSharedDeps = (elementsObj) => {
   console.log('elementsObj', elementsObj)

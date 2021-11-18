@@ -1,6 +1,6 @@
 import dagre from 'dagre'; 
 import ReactFlow, { isNode } from 'react-flow-renderer';
-import { mapDepCruiserJSONToReactFlowElements } from './node-mapping';
+import { mapDepCruiserJSONToReactFlowElements } from './mapping';
 
 let dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));const nodeWidth = 150;
