@@ -1,28 +1,5 @@
 import React from 'react';
-import { Handle } from 'react-flow-renderer';
-// Takes in an array of objects
-// Returns an array of objects for react-flow
-
-const handleNodeColor = (depType) => {
-    if (depType === 'local') return '#A4DDED';
-    else if (depType === 'root') return '#FFF8DC';
-    else return '#FA8072';
-}
-
-const handleAnimated = (depType) => {
-    if (depType === 'local' || depType === "root") return false
-    return true;
-}
-
-const handleEdgeType = (depType) => {
-    if (depType === 'local' || depType === "root") return "straight";
-    return "custom";
-}
-
-const handleEdgeStyle = (depType) => {
-    if (depType === 'local' || depType === "root") return {'strokeWidth': 2.5, 'stroke': 'lightblue'};
-    return {'strokeWidth': 0.7, 'stroke': 'salmon'};
-}
+import { handleNodeColor, handleEdgeType, handleEdgeStyle } from './node-configs';
 
 const refactorNodesForSharedDeps = (elementsObj) => {
   console.log('elementsObj', elementsObj)
@@ -83,7 +60,7 @@ const refactorNodesForSharedDeps = (elementsObj) => {
   }
 }
 
-const mapDepCruiserJSONToReactFlowElements = (input) => {
+export const mapDepCruiserJSONToReactFlowElements = (input) => {
     if (input.default === true) return [];
     const arrayOfModules = input.modules;
     const nodes = [];
@@ -153,41 +130,3 @@ const mapDepCruiserJSONToReactFlowElements = (input) => {
 
     return elementsObj;
 }
-
-const LocalNodeComponent = ({data}) => {
-  return (
-    <div style={
-      {
-        'padding': '10px',
-        'text-align': 'center',
-        'font-size': '12px',
-        'border-style': 'solid',
-        'border-width': '1px',
-        'border-color': 'darkslategrey'
-        }
-        }>
-      <Handle type="target" position="left" style={{borderRadius:0}} />
-      <div>{data.text}</div>
-      <Handle type="source" position="right" style={{borderRadius:0}} />
-    </div>
-  )
-}
-
-const DefaultNodeComponent = ({data}) => {
-  return (
-    <div style={
-      {
-        'text-align': 'center',
-        'font-size': '12px',
-        'border-color': 'darkslategrey'
-        }
-        }>
-      {(data.dependencyType === 'root') ? <Handle type="source" position="right" style={{borderRadius:0}} /> : <></>}
-      <div>{data.text}</div>
-      {(data.dependencyType !== 'root') ? <Handle type="target" position="left" style={{borderRadius:0}} /> : <></>}
-    </div>
-  )
-}
-
-
-export {mapDepCruiserJSONToReactFlowElements, LocalNodeComponent, DefaultNodeComponent};
