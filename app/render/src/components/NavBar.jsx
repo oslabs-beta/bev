@@ -17,7 +17,7 @@ const NavBar = (props) =>{
                 the function accepts an integer and will move forward/backwards in history based on its sign;
                 i.e. navigate(-1) will move back one page, navigate(+1) will move forward one page;
                 */}
-				<Route path="/chart"  element={<li onClick={() => {navigate(-1); setDiagramLoad();}}>Back</li>} />
+				<Route path="/controlpanel"  element={<li onClick={() => {navigate(-1); setDiagramLoad();}}>Back</li>} />
 			</Routes>
             </ul>
         </nav>

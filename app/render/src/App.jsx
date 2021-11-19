@@ -8,6 +8,7 @@ import './stylesheets/style.css';
 import Main from './components/Main';
 import Diagram from './components/Diagram';
 import NavBar from './components/NavBar';
+import ControlPanel from './components/ControlPanel';
 
 /*
 Implemented react-router based on react-router v6 which introduced braking changes
@@ -17,8 +18,8 @@ const App = () => {
 	const [initialDiagramLoad, setInitialDiagramLoad] = useState(false);
 	return (
 		<HashRouter>
-			<div >
-				<NavBar setInitialDiagramLoad={setInitialDiagramLoad}/>
+			<div className="main-container">
+				<div className="top-container"><NavBar setInitialDiagramLoad={setInitialDiagramLoad}/></div>
 				<Routes>
 					<Route path="/" element={<Main setState={setState} />} />
 					{console.log('state', state)}
@@ -27,7 +28,8 @@ const App = () => {
 					/chart is being passed a component Diagram which is being passed resultsElement as the property;
 					resultsElement contains the results.json file that we use to generate the graph
 					 */}
-					<Route path="/chart" element={<Diagram initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} resultElements={state} />} />
+					<Route path="/controlpanel" element={<ControlPanel initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} resultElements={state} />} />
+					{/* <Route path="/chart" element={<Diagram initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} resultElements={state} />} /> */}
 				</Routes>
 			</div>
 		</HashRouter>
