@@ -88,8 +88,8 @@ ipcMain.handle( 'app:on-analyze', ( event, folders ) => {
 	const dependencyResults = io.generateDependencyObject(folders);
 
     // Run `webpack --json > stats.json` in the terminal to generate bundle stats
-    // const bundleResults = io.generateBundleInfoObject();
-    const bundleResults = {};
+    const bundleResults = io.generateBundleInfoObject();
+    //const bundleResults = {};
     console.log('bundleResults', bundleResults)
 	const output = {dependencyResults: dependencyResults, bundleResults: bundleResults};
     return output;

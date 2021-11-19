@@ -29,12 +29,8 @@ const App = () => {
 					/chart is being passed a component Diagram which is being passed resultsElement as the property;
 					resultsElement contains the results.json file that we use to generate the graph
 					 */}
-<<<<<<< HEAD
-					<Route path="/controlpanel" element={<ControlPanel initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} resultElements={state} />} />
+					<Route path="/controlpanel" element={<ControlPanel initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} bundleInfo={bundleInfo}  resultElements={state} />} />
 					{/* <Route path="/chart" element={<Diagram initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} resultElements={state} />} /> */}
-=======
-					<Route path="/chart" element={<Diagram initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} bundleInfo={bundleInfo}  resultElements={state} />} />
->>>>>>> 51913b05d2750f3feab5ccbd9d77d2c5d13c605e
 				</Routes>
 			</div>
 		</HashRouter>
