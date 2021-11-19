@@ -86,7 +86,7 @@ exports.watchFiles = ( win ) => {
 exports.generateDependencyObject = (folderArr) =>{
 	const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE = folderArr;
 	const cruiseOptions = {
-		// includeOnly: ["src", "assets", "node_modules"],
+		includeOnly: ["src", "assets", "node_modules"],
 		exclude: {
 			// path: ["release", "public", "dist"]
 		},
@@ -129,12 +129,22 @@ exports.generateBundleInfoObject = () =>{
 	const rawStats = fs.readFileSync('stats.json');
 	const stats = JSON.parse(rawStats);
 	const {assets, modules} = stats;
-	const {size, name} = assets[0];
-	outputObj['assets'] = {
-		'name': name,
-		'size': size
-	}
+	let totalSize = 0;
 
+	// Fetch assets 
+	outputObj['assets'] = {};
+	assets.forEach(asset => {
+		const { name, size } = asset;
+		const type = name.split('.').pop();
+		totalSize += size;
+		if (outputObj['assets'].hasOwnProperty(type)) {
+			outputObj['assets'][type].push({ 'name': name, 'size': size })
+		} else {
+			outputObj['assets'][type] = [{'name': name, 'size': size}];
+		}
+	})
+
+	// Fetch modules
 	outputObj['modules'] = [];
 	modules.forEach(module => {
 		const {size, name} = module;
@@ -144,6 +154,17 @@ exports.generateBundleInfoObject = () =>{
 		})
 	})
 
-	// return JSON.stringify(outputObj);
+	// Calculate total asset sizes
+	outputObj['sizes'] = {};
+	for (type in outputObj['assets']) {
+		outputObj['sizes'][type] = 0; 
+		outputObj['assets'][type].forEach(asset => {
+			outputObj['sizes'][type] += asset.size;
+		})
+	}
+
+	// Set total bundle size
+	outputObj['sizes']['total'] = totalSize;
+
 	return outputObj;
 }

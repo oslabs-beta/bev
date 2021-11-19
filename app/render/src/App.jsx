@@ -9,6 +9,8 @@ import Main from './components/Main';
 import Diagram from './components/Diagram';
 import NavBar from './components/NavBar';
 import ControlPanel from './components/ControlPanel';
+import ReactBootstrap from 'react-bootstrap';
+import Vue from 'vue';
 
 /*
 Implemented react-router based on react-router v6 which introduced braking changes
