@@ -6,7 +6,7 @@ import Dropdown from 'react-dropdown';
 
 const Files = (props) =>{
 
-  const bundle = props.bundle;
+  const bundle = props.mfe;
 
   return (
     <>

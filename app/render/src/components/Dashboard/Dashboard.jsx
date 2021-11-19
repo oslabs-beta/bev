@@ -5,16 +5,16 @@ import Files from './Files';
 
 const Dashboard = (props) =>{
   // props.bundleInfo is an array
-  const [bundle, setBundle] = useState(props.mfe);
+  //const [bundle, setBundle] = useState(props.mfe);
   // const [weights , setWeights] = useState({JS: 400, CSS: 200, HTML: 150, IMG: 80, TOTAL: 830})
-  const [weights , setWeights] = useState(props.mfe.sizes)
+  //const [weights , setWeights] = useState(props.mfe.sizes)
   const [bundles, setBundles] = useState(['bundle-v1', 'bundle-v2', 'bundle-v3']);
 
 	return (
 			<div className="dashboard">
-        <PercentBar weights={weights} setMFE={props.setMFE} bundleInfo={props.bundleInfo} />
+        <PercentBar setMFE={props.setMFE} mfe={props.mfe} bundleInfo={props.bundleInfo} />
 				<div className="card col-s1 col-e6 row-s2 row-ee">
-          <Files bundle={bundle} />
+          <Files mfe={props.mfe} />
         </div>
         <div className="card col-s1 col-e6 row-s5 row-ee">
           <div className="card-header">

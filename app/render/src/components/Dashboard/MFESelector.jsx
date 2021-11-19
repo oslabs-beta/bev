@@ -11,11 +11,20 @@ const MFESelector = ( props ) =>{
 
   const mfeHandler = (e) =>{
     console.log('SELECTED FOLDER : ', e.target.value);
+    for(let bundle of props.bundleInfo){
+      if(bundle.folder === e.target.value){
+        props.setMFE(bundle);
+        console.log('SET MFE : ', bundle);
+        return
+      }
+    }
+    console.log('CANNOT SET MFE ');
+    return
   }
 
   return (
     <div className="mfe-selector-div">
-      <select id="mfe-selector" onClick={()=>mfeHandler()}>
+      <select id="mfe-selector" onClick={(e)=>mfeHandler(e)}>
         {options}
       </select>  
     </div>
