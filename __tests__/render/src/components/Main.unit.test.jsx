@@ -6,7 +6,7 @@ import {
   Link
 } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
-import Main from './Main';
+import Main from '../../../../app/render/src/components/Main';
 
 
 describe('Existential Tests', () => {
