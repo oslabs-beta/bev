@@ -44,6 +44,7 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "@testing-library/react": "^12.1.2",
     "dagre": "^0.8.5",
     "dependency-cruiser": "^10.6.0",
     "drag-drop": "^6.1.0",

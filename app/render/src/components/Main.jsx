@@ -10,10 +10,9 @@ const Main = (props) =>{
 		
 	};
 
-
 	return (
 		<>
-			<div className="container">
+			<div className="container" testId="container">
 				<div id='uploader' className='app__uploader'>
 					<div className='uploader__button-area'>
 							<button className='uploader__button' id='uploader-button'>Click To Add Folders</button>
@@ -32,6 +31,5 @@ const Main = (props) =>{
 		</>
 	);
 };
-
 
 export default Main;
