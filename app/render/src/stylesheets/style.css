@@ -207,6 +207,10 @@ img {
 }
 
 /* diagram features */
+.react-flow {
+	overflow-wrap: anywhere;
+}
+
 .react-flow-fix {
 	position: unset !important;
 }
