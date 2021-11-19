@@ -3,7 +3,7 @@
 
 bev (Bird’s Eye View) is a microservice migration helper and a dependency manager. Developed under tech accelerator, OS Labs, bev is a multi-platform desktop application that allows you to analyze and visualize dependencies. bev alleviates the pain of migrating to microservices.
 
-Download for MacOS, Windows and Linux 
+Download for MacOS, Windows and Linux.
 
 ### Getting Started With bev
 
