@@ -1,1 +1,0 @@
-import Diagram from './Diagram';

@@ -20,16 +20,16 @@ const Main = (props) =>{
 			<div className="container" data-testid="container">
 				<div id='uploader' className='app__uploader'>
 					<div className='uploader__button-area'>
-							<button className='uploader__button' id='uploader-button'>Click To Add Folders</button>
+							<button className='uploader__button' id='uploader-button' data-testid="uploader-button">Click To Add Folders</button>
 					</div>
 				</div>
 				<div id='svg-display'></div>
-				<div id='folderlist' className='folders'></div>
+				<div id='folderlist' className='folders' data-testid="folder-list"></div>
 				<div id='analyze-button'></div>
 				<div id='submit-button-div'>
 					{/* <input type='hidden' id='trigger' ref={results} value='' /> */}
 					<Link to="/chart">
-						<input type="hidden" id="trigger" ref={results} value="" onClick={(e) => updateState(e)} />
+						<input type="hidden" id="trigger" ref={results} value="" data-testid="trigger-event" onClick={(e) => updateState(e)} />
 					</Link>
 				</div>
 			</div>
