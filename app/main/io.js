@@ -5,7 +5,9 @@ const os = require( 'os' );
 const open = require( 'open' );
 const treeify = require('treeify');
 const {cruise} = require("dependency-cruiser");
-const {exec} = require("child_process");
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
 
 // Local dependencies
 const notification = require( './notification' );
@@ -124,47 +126,73 @@ exports.generateDependencyObject = (folderArr) =>{
 
 }
 
-exports.generateBundleInfoObject = () =>{
-	const outputObj = {};
-	const rawStats = fs.readFileSync('stats.json');
-	const stats = JSON.parse(rawStats);
-	const {assets, modules} = stats;
-	let totalSize = 0;
+exports.generateBundleInfoObject = async(folders) =>{
 
-	// Fetch assets 
-	outputObj['assets'] = {};
-	assets.forEach(asset => {
-		const { name, size } = asset;
-		const type = name.split('.').pop();
-		totalSize += size;
-		if (outputObj['assets'].hasOwnProperty(type)) {
-			outputObj['assets'][type].push({ 'name': name, 'size': size })
-		} else {
-			outputObj['assets'][type] = [{'name': name, 'size': size}];
+	// Generate stats.json
+	// webpack --profile --json > stats.json
+	// let i = 0;	
+	// for(let folder of folders){
+	// 	const {stdout, stderr} = await exec(`webpack --profile --json > ${appDir}/stats${i}.json`,{cwd: folder});
+
+	// 	if (stderr) {
+	// 		console.log('stderr', stderr);
+	// 	} else {
+	// 		console.log('stdout', stderr);
+	// 	}
+	// 	i += 1;
+	// };
+	console.log('folders', folders);
+	console.log('Exited forEach loop for generating stats.json');
+
+	const outputBundleObjectsArray = [];
+	for (let i = 0; i < folders.length; i += 1) {
+		const outputObj = {};
+		const rawStats = fs.readFileSync(`${appDir}/stats${i}.json`);
+		const stats = JSON.parse(rawStats);
+		const {assets, modules} = stats;
+		let totalSize = 0;
+
+		// Set folder property
+		outputObj['folder'] = folders[i];
+
+		// Fetch assets 
+		outputObj['assets'] = {};
+		assets.forEach(asset => {
+			const { name, size } = asset;
+			const type = name.split('.').pop();
+			totalSize += size;
+			if (outputObj['assets'].hasOwnProperty(type)) {
+				outputObj['assets'][type].push({ 'name': name, 'size': size })
+			} else {
+				outputObj['assets'][type] = [{'name': name, 'size': size}];
+			}
+		})
+
+		// Fetch modules
+		outputObj['modules'] = [];
+		modules.forEach(module => {
+			const {size, name} = module;
+			outputObj['modules'].push({
+				'name': name,
+				'size': size
+			})
+		})
+
+		// Calculate total asset sizes
+		outputObj['sizes'] = {};
+		for (type in outputObj['assets']) {
+			outputObj['sizes'][type] = 0; 
+			outputObj['assets'][type].forEach(asset => {
+				outputObj['sizes'][type] += asset.size;
+			})
 		}
-	})
 
-	// Fetch modules
-	outputObj['modules'] = [];
-	modules.forEach(module => {
-		const {size, name} = module;
-		outputObj['modules'].push({
-			'name': name,
-			'size': size
-		})
-	})
-
-	// Calculate total asset sizes
-	outputObj['sizes'] = {};
-	for (type in outputObj['assets']) {
-		outputObj['sizes'][type] = 0; 
-		outputObj['assets'][type].forEach(asset => {
-			outputObj['sizes'][type] += asset.size;
-		})
+		// Set total bundle size
+		outputObj['sizes']['total'] = totalSize;
+		
+		outputBundleObjectsArray.push(outputObj);
 	}
 
-	// Set total bundle size
-	outputObj['sizes']['total'] = totalSize;
+	return outputBundleObjectsArray;
+}	
 
-	return outputObj;
-}

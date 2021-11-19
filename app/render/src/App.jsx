@@ -9,15 +9,15 @@ import Main from './components/Main';
 import Diagram from './components/Diagram';
 import NavBar from './components/NavBar';
 import ControlPanel from './components/ControlPanel';
-import ReactBootstrap from 'react-bootstrap';
-import Vue from 'vue';
+// import ReactBootstrap from 'react-bootstrap';
+// import Vue from 'vue';
 
 /*
 Implemented react-router based on react-router v6 which introduced braking changes
 */
 const App = () => {
 	const [state, setState] = useState({default: true});
-	const [bundleInfo, setBundleInfo] = useState({}); 
+	const [bundleInfo, setBundleInfo] = useState([]); 
 	const [initialDiagramLoad, setInitialDiagramLoad] = useState(false);
 	return (
 		<HashRouter>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Bar from './Bar';
+import MFESelector from './MFESelector';
 
 const PercentBar = (props) =>{
 
@@ -14,6 +15,7 @@ const PercentBar = (props) =>{
 
 	return (
 		<div className ="totalsize-card">
+			<MFESelector setMFE={props.setMFE} bundleInfo={props.bundleInfo} />
 			<h3> TOTAL SIZE BY TYPE</h3>
 			<div className="percent-bar">
 				{bars}
