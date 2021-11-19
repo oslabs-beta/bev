@@ -436,7 +436,9 @@ select option {
 .col-e5 {
 	grid-column-end: 5;
 }
-
+.col-e6 {
+	grid-column-end: 6;
+}
 .col-ee {
 	grid-column-end: -1;
 }

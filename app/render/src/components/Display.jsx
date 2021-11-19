@@ -3,13 +3,12 @@ import Dashboard from './Dashboard/Dashboard';
 import Diagram from './Diagram';
 
 const Display = (props) =>{
-
-  let displayTab = <Dashboard />;
+  let displayTab = <Dashboard bundleInfo={props.bundleInfo} />;
   if(props.tab === 'dashboard'){
-    displayTab = <Dashboard />;
+    displayTab = <Dashboard bundleInfo={props.bundleInfo} />;
   }
   else if(props.tab == 'tree'){
-    displayTab = <Diagram initialDiagramLoad={props.initialDiagramLoad} setInitialDiagramLoad={props.setInitialDiagramLoad} resultElements={props.resultElements}/>;
+    displayTab = <Diagram initialDiagramLoad={props.initialDiagramLoad} setInitialDiagramLoad={props.setInitialDiagramLoad} resultElements={props.resultElements}  />;
   }
 
 	return (

@@ -4,9 +4,9 @@ import Bar from './Bar';
 const PercentBar = (props) =>{
 
   const bars = [];
-	const totalWeight = props.weights.TOTAL;
+	const totalWeight = props.weights.total;
 	for(let key in props.weights){
-    if(key!='TOTAL') bars.push(<Bar name={key} key={key} weightPercent={props.weights[key]*100/totalWeight}/>);
+    if(key!='total') bars.push(<Bar name={key} key={key} weightPercent={props.weights[key]*100/totalWeight}/>);
 
   }
 

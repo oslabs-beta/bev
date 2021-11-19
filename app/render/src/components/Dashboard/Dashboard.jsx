@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import PercentBar from './PercentBar';
 import BundleSelector from './BundleSelector';
+import Files from './Files';
 
 const Dashboard = (props) =>{
 
-  const [bundle, setBundle] = useState('bundle.js');
-  const [weights , setWeights] = useState({JS: 400, CSS: 200, HTML: 150, IMG: 80, TOTAL: 830})
+  const [bundle, setBundle] = useState(props.bundleInfo);
+  // const [weights , setWeights] = useState({JS: 400, CSS: 200, HTML: 150, IMG: 80, TOTAL: 830})
+  const [weights , setWeights] = useState(props.bundleInfo.sizes)
   const [bundles, setBundles] = useState(['bundle-v1', 'bundle-v2', 'bundle-v3']);
 
   const TREE = {
@@ -31,29 +33,10 @@ const Dashboard = (props) =>{
 	return (
 			<div className="dashboard">
         <PercentBar weights={weights} />
-				<div className="card col-s1 col-e3 row-s2 row-e5">
-          <div className="card-header">
-         FILES TYPE
-          </div>
-          <div className="card-body">
-          Body
-          </div>
-          <div className="card-footer">
-          Footer
-          </div>
+				<div className="card col-s1 col-e6 row-s2 row-ee">
+          <Files bundle={bundle} />
         </div>
-        <div className="card col-s3 col-ee row-s2 row-ee">
-          <div className="card-header">
-         Cake Chart
-          </div>
-          <div className="card-body">
-          Chart Here
-          </div>
-          <div className="card-footer">
-          Footer
-          </div>
-        </div>
-        <div className="card col-s1 col-e3 row-s5 row-ee">
+        <div className="card col-s1 col-e6 row-s5 row-ee">
           <div className="card-header">
          Bundle Version Control
           </div>

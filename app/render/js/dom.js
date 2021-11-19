@@ -61,7 +61,7 @@ window.analyzeDep = function () {
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
 		//change the value of a dom element.
 		const startProject = document.getElementById('start-project');
-		starProject.value = JSON.stringify(results);
+		startProject.value = JSON.stringify(results);
 		startProject.click();
 
 	});
