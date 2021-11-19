@@ -14,20 +14,21 @@ Implemented react-router based on react-router v6 which introduced braking chang
 */
 const App = () => {
 	const [state, setState] = useState({default: true});
+	const [bundleInfo, setBundleInfo] = useState({}); 
 	const [initialDiagramLoad, setInitialDiagramLoad] = useState(false);
 	return (
 		<HashRouter>
 			<div >
 				<NavBar setInitialDiagramLoad={setInitialDiagramLoad}/>
 				<Routes>
-					<Route path="/" element={<Main setState={setState} />} />
+					<Route path="/" element={<Main setState={setState} setBundleInfo={setBundleInfo} />} />
 					{console.log('state', state)}
 					{console.log('initialDiagramLoad', initialDiagramLoad)}
 					{/* 
 					/chart is being passed a component Diagram which is being passed resultsElement as the property;
 					resultsElement contains the results.json file that we use to generate the graph
 					 */}
-					<Route path="/chart" element={<Diagram initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} resultElements={state} />} />
+					<Route path="/chart" element={<Diagram initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} bundleInfo={bundleInfo}  resultElements={state} />} />
 				</Routes>
 			</div>
 		</HashRouter>

@@ -6,7 +6,12 @@ const Main = (props) =>{
 
 	const updateState = (e) => {
 		// Access json generated
-		props.setState(JSON.parse(e.target.value));
+		console.log('e.target.value', JSON.parse(e.target.value))
+		console.log('bundleResults', JSON.parse(e.target.value).bundleResults)
+		props.setState(JSON.parse(e.target.value).dependencyResults);
+		props.setBundleInfo(JSON.parse(e.target.value).bundleResults);
+		// props.setState(e.target.value['dependencyResults']);
+		// props.setBundleInfo(e.target.value['bundleResults']);
 		
 	};
 
