@@ -21,7 +21,7 @@
     "url": "https://github.com/oslabs-beta/bev"
   },
   "jest": {
-    "testEnvironment": "jest-environment-jsdom-global"
+    "testEnvironment": "jest-environment-jsdom"
   },
   "homepage": "https://github.com/oslabs-beta/bev",
   "devDependencies": {
@@ -40,6 +40,7 @@
     "fs": "0.0.1-security",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^27.3.1",
+    "jest-environment-jsdom": "^27.3.1",
     "json-loader": "^0.5.7",
     "path": "^0.12.7",
     "react-test-renderer": "^17.0.2",
