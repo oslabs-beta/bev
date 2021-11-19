@@ -27,7 +27,8 @@ const Main = (props) =>{
 				<div id='analyze-button'></div>
 				<div id='submit-button-div'>
 					{/* <input type='hidden' id='trigger' ref={results} value='' /> */}
-					<Link to="/controlpanel">
+					{/* <Link to="/controlpanel"> */}
+					<Link to="/loading">
 						<input type="hidden" id="start-project" value="" onClick={(e) => updateState(e)} />
 					</Link>
 				</div>
