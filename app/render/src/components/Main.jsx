@@ -25,9 +25,9 @@ const Main = (props) =>{
 				</div>
 				<div id='folderlist' className='folders'></div>
 				<div id='analyze-button'> </div>
-				<button id='create-project' onClick={setRenderLoader(true)}>Start Project</button>
+				<button id='create-project' >Start Project</button>
 				<div id='submit-button-div'>
-					{/* <input type='hidden' id='trigger' ref={results} value='' /> */}
+					<input type='hidden' id='loading' onClick={()=>setRenderLoader(true)} />
 					<Link to="/controlpanel">
 						<input type="hidden" id="start-project" value="" onClick={(e) => {updateState(e); }} />
 					</Link>

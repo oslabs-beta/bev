@@ -58,10 +58,13 @@ window.analyzeDep = function () {
 	const folderObjs = Array.from(folderNodes);
 	const folders = folderObjs.map( node => node.getAttribute('data-folderpath'))
 
+	const loadProject = document.getElementById('loading');
+	loadProject.innerText = 'Loading...';
+	loadProject.click();
+
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
 		//change the value of a dom element.
 		const startProject = document.getElementById('start-project');
-		startProject.innerText = 'Loading...';
 		startProject.value = JSON.stringify(results);
 		startProject.click();
 

@@ -134,14 +134,23 @@ exports.generateBundleInfoObject = async(folders) =>{
 	console.log('folders in io.js', folders)
 	let i = 0;	
 	for(let folder of folders){
-		const {stdout, stderr} = await exec(`webpack --profile --json > ${appDir}/stats${i}.json`,{cwd: folder});
+		let fileName = folder.replaceAll(':','');
+		fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}` : `stats-${fileName.replaceAll('/','-')}`;
+		console.log("stats-folder.replaceAll('\\','-') :", fileName.replaceAll('\\','-'));
+		console.log('fileName ', fileName);
+		const filepath = path.resolve(appDir, fileName);
+		console.log('filepath: ', filepath);
+		if(!fs.existsSync( `${filepath}.json` ) ){
+			const {stdout, stderr} = await exec(`webpack --profile --json > ${appDir}/${fileName}.json`,{cwd: folder});
 
-		if (stderr) {
-			console.log('stderr', stderr);
-		} else {
-			console.log('stdout', stderr);
+			if (stderr) {
+				console.log('stderr', stderr);
+			} else {
+				console.log('stdout', stderr);
+			}
+			i += 1;
 		}
-		i += 1;
+
 	};
 	console.log('folders', folders);
 	console.log('Exited forEach loop for generating stats.json');

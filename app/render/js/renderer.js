@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Disabled by default, but will be removed if displayFolders is invoked and populates its array
     analyzeButton.disabled = true;
-    analyzeButton.innerText = 'Loading...';
     // const analyzeDiv = document.getElementById('analyze-button');
     // if(analyzeDiv) analyzeDiv.appendChild(analyzeButton);
   }
