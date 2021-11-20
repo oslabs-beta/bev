@@ -16,7 +16,7 @@ const Dashboard = (props) =>{
 				<div className="card col-s1 col-e6 row-s2 row-ee">
           <Files mfe={props.mfe} />
         </div>
-        <div className="card col-s1 col-e6 row-s5 row-ee">
+        {/* <div className="card col-s1 col-e6 row-s5 row-ee">
           <div className="card-header">
          Bundle Version Control
           </div>
@@ -26,7 +26,7 @@ const Dashboard = (props) =>{
           <div className="card-footer">
           Footer
           </div>
-        </div>
+        </div> */}
 			</div>
 	);
 };

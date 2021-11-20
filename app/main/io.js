@@ -127,14 +127,15 @@ exports.generateDependencyObject = (folderArr) =>{
 
 }
 
-exports.generateBundleInfoObject = async(folders) =>{
+exports.generateBundleInfoObject = async (folders) =>{
 
 	// Generate stats.json
 	// webpack --profile --json > stats.json
 	console.log('folders in io.js', folders)
 	let i = 0;	
+	let fileName;
 	for(let folder of folders){
-		let fileName = folder.replaceAll(':','');
+		fileName = folder.replaceAll(':','');
 		fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}` : `stats-${fileName.replaceAll('/','-')}`;
 		console.log("stats-folder.replaceAll('\\','-') :", fileName.replaceAll('\\','-'));
 		console.log('fileName ', fileName);
@@ -146,7 +147,7 @@ exports.generateBundleInfoObject = async(folders) =>{
 			if (stderr) {
 				console.log('stderr', stderr);
 			} else {
-				console.log('stdout', stderr);
+				console.log('stdout', stdout);
 			}
 			i += 1;
 		}
@@ -158,7 +159,7 @@ exports.generateBundleInfoObject = async(folders) =>{
 	const outputBundleObjectsArray = [];
 	for (let i = 0; i < folders.length; i += 1) {
 		const outputObj = {};
-		const rawStats = fs.readFileSync(`${appDir}/stats${i}.json`);
+		const rawStats = fs.readFileSync(`${appDir}/${fileName}.json`);
 		const stats = JSON.parse(rawStats);
 		const {assets, modules} = stats;
 		let totalSize = 0;

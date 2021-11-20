@@ -18,7 +18,7 @@ const PercentBar = (props) =>{
 	return (
 		<div className ="totalsize-card">
 			{displayMFESelector}
-			<h3> TOTAL SIZE BY TYPE</h3>
+			<h3> Total size: {totalWeight} bytes</h3>
 			<div className="percent-bar">
 				{bars}
 			</div>

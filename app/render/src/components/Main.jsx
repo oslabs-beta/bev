@@ -21,6 +21,7 @@ const Main = (props) =>{
 				<div id='uploader' className='app__uploader'>
 					<div className='uploader__button-area'>
 							<button className='uploader__button' id='uploader-button'>Click To Add Folders</button>
+							<p><i>(Make sure the uploaded projects contain a webpack config file in their root directories!)</i></p>
 					</div>
 				</div>
 				<div id='folderlist' className='folders'></div>

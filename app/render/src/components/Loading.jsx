@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import ControlPanel from "./ControlPanel";
-import loading from '../stylesheets/kingfisher-loading.gif';
+import loading from '../stylesheets/hummingbird-loading.gif';
 
 /*
 Implemented react-router based on react-router v6 which introduced braking changes
@@ -12,8 +12,8 @@ const Loading = (props) => {
 	return (
         <>
             <div className="main-container">
-                <img style={{margin: "auto", width: "200px"}} src={loading} alt="loading..." />
-                <p style={{textAlign: "center", color: "black"}}>Loading... This may take a while.</p>
+                <img style={{margin: "auto", width: "300px"}} src={loading} alt="loading..." />
+                <p style={{margin:"auto", color: "black"}}>Loading... This may take a while.</p>
             </div>
         </>
 	);

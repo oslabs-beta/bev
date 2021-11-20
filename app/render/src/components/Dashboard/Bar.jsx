@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Bar = (props) =>{
 
-  const colors = { js: '#ffadad', css: '#ffd6a5', sass: '#fdffb6', ts: '#caffbf',  html: '#9bf6ff', vue: '#a0c4ff', img: '#bdb2ff', svg: '#ffc6ff', jpg: '#bdb2ff', jpeg: '#bdb2ff', png: '#bdb2ff'};
+  const colors = { js: '#ffadad', css: '#ffd6a5', sass: '#fdffb6', ts: '#caffbf',  html: '#9bf6ff', vue: '#a0c4ff', img: '#bdb2ff', svg: '#ffc6ff', jpg: '#bdb2ff', jpeg: '#bdb2ff', png: '#bdb2ff', gif: '#bdb2ff'};
 
 
 	return (
