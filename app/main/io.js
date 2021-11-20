@@ -14,6 +14,7 @@ const notification = require( './notification' );
 
 // Get application directory
 const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
+// const appDir = path.resolve('/BEV-project-files' );
 
 // Folder json name
 const folderName = 'folders.json';
@@ -130,17 +131,18 @@ exports.generateBundleInfoObject = async(folders) =>{
 
 	// Generate stats.json
 	// webpack --profile --json > stats.json
-	// let i = 0;	
-	// for(let folder of folders){
-	// 	const {stdout, stderr} = await exec(`webpack --profile --json > ${appDir}/stats${i}.json`,{cwd: folder});
+	console.log('folders in io.js', folders)
+	let i = 0;	
+	for(let folder of folders){
+		const {stdout, stderr} = await exec(`webpack --profile --json > ${appDir}/stats${i}.json`,{cwd: folder});
 
-	// 	if (stderr) {
-	// 		console.log('stderr', stderr);
-	// 	} else {
-	// 		console.log('stdout', stderr);
-	// 	}
-	// 	i += 1;
-	// };
+		if (stderr) {
+			console.log('stderr', stderr);
+		} else {
+			console.log('stdout', stderr);
+		}
+		i += 1;
+	};
 	console.log('folders', folders);
 	console.log('Exited forEach loop for generating stats.json');
 

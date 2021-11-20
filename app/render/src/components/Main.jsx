@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Loading from './Loading';
 
 const Main = (props) =>{
 
+	const [renderLoader, setRenderLoader] = useState(false);
 	const updateState = (e) => {
 		// Access json generated
 		console.log('e.target.value', JSON.parse(e.target.value))
 		console.log('bundleResults', JSON.parse(e.target.value).bundleResults)
 		props.setState(JSON.parse(e.target.value).dependencyResults);
 		props.setBundleInfo(JSON.parse(e.target.value).bundleResults);
-		// props.setState(e.target.value['dependencyResults']);
-		// props.setBundleInfo(e.target.value['bundleResults']);
 		
 	};
 
@@ -24,13 +24,15 @@ const Main = (props) =>{
 					</div>
 				</div>
 				<div id='folderlist' className='folders'></div>
-				<div id='analyze-button'></div>
+				<div id='analyze-button'> </div>
+				<button id='create-project' onClick={setRenderLoader(true)}>Start Project</button>
 				<div id='submit-button-div'>
 					{/* <input type='hidden' id='trigger' ref={results} value='' /> */}
 					<Link to="/controlpanel">
-						<input type="hidden" id="start-project" value="" onClick={(e) => updateState(e)} />
+						<input type="hidden" id="start-project" value="" onClick={(e) => {updateState(e); }} />
 					</Link>
 				</div>
+				{(renderLoader) ? (<Loading bundleInfo={props.bundleInfo} /> ) : (<> </>) }
 			</div>
 		</>
 	);

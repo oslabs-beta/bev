@@ -53,14 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Create an analyze button which has access to the analyzeDep function
     // Append it below the folder display area (see app/src/components/Main.jsx)
-    const analyzeButton = document.createElement('button');
-    analyzeButton.setAttribute('id', 'create-project');
+    // const analyzeButton = document.createElement('button');
+    const analyzeButton = document.querySelector('#create-project');
+    // analyzeButton.setAttribute('id', 'create-project');
     analyzeButton.setAttribute('onclick', 'analyzeDep()');
+
     // Disabled by default, but will be removed if displayFolders is invoked and populates its array
     analyzeButton.disabled = true;
-    analyzeButton.innerText = 'Start Project';
-    const analyzeDiv = document.getElementById('analyze-button');
-    if(analyzeDiv) analyzeDiv.appendChild(analyzeButton);
+    analyzeButton.innerText = 'Loading...';
+    // const analyzeDiv = document.getElementById('analyze-button');
+    // if(analyzeDiv) analyzeDiv.appendChild(analyzeButton);
   }
 
   setMainButtons();
