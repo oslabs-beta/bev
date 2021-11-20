@@ -7,7 +7,7 @@ import ReactFlow, {
   Background,
 } from 'react-flow-renderer';
 import { LocalNodeComponent, DefaultNodeComponent } from '../node-handling/styling';
-import { mapToElements, allNodesAndEdges } from '../node-handling/reposition'
+import { mapToElements } from '../node-handling/reposition'
 import dagre from 'dagre';
 
 // React flow props, independent of Diagram hooks
@@ -21,16 +21,19 @@ const nodeTypes = {
   default: DefaultNodeComponent
 }
 
+// let nodesAndEdges = allNodesAndEdges;
+let nodesAndEdges;
+
 const Diagram = ({ resultElements, bundleInfo, initialDiagramLoad, setInitialDiagramLoad }) => {
   // On first load, reinitialize dagre graph
   if (!initialDiagramLoad) {
     const dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
-    allNodesAndEdges = mapToElements(resultElements);
+    nodesAndEdges = mapToElements(resultElements);
   } 
 
   // Diagram hooks
-  const [elements, setElements]= useState(!initialDiagramLoad ? [...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...allNodesAndEdges.edges] : []);
+  const [elements, setElements]= useState(!initialDiagramLoad ? [...nodesAndEdges.localNodes, ...nodesAndEdges.thirdPartyNodes, ...nodesAndEdges.edges] : []);
   const [clickedElement, setClickedElement] = useState({});
 
 
@@ -45,17 +48,17 @@ const Diagram = ({ resultElements, bundleInfo, initialDiagramLoad, setInitialDia
       console.log('if block triggered')
       const id = clickedElement.id;
       const newEdges = [];
-      allNodesAndEdges.edges.forEach(edge => {
+      nodesAndEdges.edges.forEach(edge => {
         if (edge.source === id) edge.animated = !edge.animated;
         if (edge.target === id) edge.animated = !edge.animated;
         newEdges.push(edge);
       })
       console.log('click', clickedElement);
-      setElements([...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...newEdges]);
+      setElements([...nodesAndEdges.localNodes, ...nodesAndEdges.thirdPartyNodes, ...newEdges]);
 
     } else {
-      console.log('else block triggered')
-      setElements([...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...allNodesAndEdges.edges]);
+      console.log('else block triggered');
+      setElements([...nodesAndEdges.localNodes, ...nodesAndEdges.thirdPartyNodes, ...nodesAndEdges.edges]);
     }
   }, [clickedElement, resultElements])
 
