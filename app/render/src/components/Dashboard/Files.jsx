@@ -64,7 +64,7 @@ const Files = (props) =>{
               {k}
             </div>
             <div>
-              {totalSizePerAsset[k]}
+              {totalSizePerAsset[k]} bytes
             </div>
           </div>
           <div id="file-type-details">
@@ -77,7 +77,7 @@ const Files = (props) =>{
                 borderStyle: 'groove',
                 borderWidth: 'thin',
                 backgroundColor: '#f0f0f0'
-              }}><div>{e.name}</div> <div>{e.size}</div></div>) : <></>))}
+              }}><div>{e.name}</div> <div>{e.size} bytes</div></div>) : <></>))}
           </div>
         </>
       ))}

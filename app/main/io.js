@@ -134,6 +134,9 @@ exports.generateBundleInfoObject = async (folders) =>{
 	console.log('folders in io.js', folders)
 	let i = 0;	
 	let fileName;
+
+	const outputBundleObjectsArray = [];
+
 	for(let folder of folders){
 		fileName = folder.replaceAll(':','');
 		fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}` : `stats-${fileName.replaceAll('/','-')}`;
@@ -141,6 +144,8 @@ exports.generateBundleInfoObject = async (folders) =>{
 		console.log('fileName ', fileName);
 		const filepath = path.resolve(appDir, fileName);
 		console.log('filepath: ', filepath);
+
+		//If stats file does not exist then create
 		if(!fs.existsSync( `${filepath}.json` ) ){
 			const {stdout, stderr} = await exec(`webpack --profile --json > ${appDir}/${fileName}.json`,{cwd: folder});
 
@@ -152,12 +157,7 @@ exports.generateBundleInfoObject = async (folders) =>{
 			i += 1;
 		}
 
-	};
-	console.log('folders', folders);
-	console.log('Exited forEach loop for generating stats.json');
-
-	const outputBundleObjectsArray = [];
-	for (let i = 0; i < folders.length; i += 1) {
+		//Read from stats file and store in outputBundleObjectsArray
 		const outputObj = {};
 		const rawStats = fs.readFileSync(`${appDir}/${fileName}.json`);
 		const stats = JSON.parse(rawStats);
@@ -165,7 +165,7 @@ exports.generateBundleInfoObject = async (folders) =>{
 		let totalSize = 0;
 
 		// Set folder property
-		outputObj['folder'] = folders[i];
+		outputObj['folder'] = folder;
 
 		// Fetch assets 
 		outputObj['assets'] = {};
@@ -202,8 +202,11 @@ exports.generateBundleInfoObject = async (folders) =>{
 		// Set total bundle size
 		outputObj['sizes']['total'] = totalSize;
 		
-		outputBundleObjectsArray.push(outputObj);
-	}
+		outputBundleObjectsArray.push({...outputObj});
+
+
+	};
+	console.log('folders', folders);
 
 	return outputBundleObjectsArray;
 }	

@@ -6,7 +6,7 @@ const MFESelector = ( props ) =>{
   const folders = props.bundleInfo.map(e => e.folder);
   const options = [];
   folders.forEach( folder =>{
-    options.push(<option key={folder} value={folder}>{folder}</option>);
+    options.push(<option key={folder} value={folder}>{folder.split('\\').pop()}</option>);
   });
 
   const mfeHandler = (e) =>{
