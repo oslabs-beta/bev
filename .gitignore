@@ -107,13 +107,20 @@ dist
 *.BAK
 
 # bundles
-app/render/html/bundle.js
-app/render/html/index.html
-app/render/html/bundle.js.LICENSE.txt
+app/render/html/
 
 #ignore out files
 release/
+out/
 
 # results
 results.json
 dependency-graph.svg
+stats.json
+
+# lock files
+package-lock.json
+yarn.lock
+
+# electron builder
+electron-builder.json
