@@ -3,13 +3,12 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 const NavBar = (props) =>{
 
     const navigate = useNavigate();
-
     const setDiagramLoad = () => {
         props.setInitialDiagramLoad(false);
     }
     return (
         <nav>
-            <h1 className='title'>BEV</h1>
+            <h1 className='title'>bev</h1>
             <ul>
             <Routes>
                 {/*

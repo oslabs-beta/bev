@@ -1,5 +1,7 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Josefin+Sans:wght@700&family=Oswald:wght@500&family=Roboto:wght@300&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap'); */
+
 * {
 	font-family: Roboto, sans-serif;
 	font-size: 14px;
@@ -73,6 +75,7 @@ h1 {
 	align-items: center;
 	/* font-family: 'Josefin Sans', sans-serif; */
 	font-family: 'Varela Round', sans-serif;
+	/* font-family: 'Jua', sans-serif; */
 	color: #fff;
 	margin: 0.4em;
 }
