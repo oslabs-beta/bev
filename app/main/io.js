@@ -5,13 +5,16 @@ const os = require( 'os' );
 const open = require( 'open' );
 const treeify = require('treeify');
 const {cruise} = require("dependency-cruiser");
-const {exec} = require("child_process");
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
 
 // Local dependencies
 const notification = require( './notification' );
 
 // Get application directory
 const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
+// const appDir = path.resolve('/BEV-project-files' );
 
 // Folder json name
 const folderName = 'folders.json';
@@ -86,7 +89,7 @@ exports.watchFiles = ( win ) => {
 exports.generateDependencyObject = (folderArr) =>{
 	const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE = folderArr;
 	const cruiseOptions = {
-		// includeOnly: ["src", "assets", "node_modules"],
+		includeOnly: ["src", "assets", "node_modules"],
 		exclude: {
 			// path: ["release", "public", "dist"]
 		},
@@ -124,26 +127,87 @@ exports.generateDependencyObject = (folderArr) =>{
 
 }
 
-exports.generateBundleInfoObject = () =>{
-	const outputObj = {};
-	const rawStats = fs.readFileSync('stats.json');
-	const stats = JSON.parse(rawStats);
-	const {assets, modules} = stats;
-	const {size, name} = assets[0];
-	outputObj['assets'] = {
-		'name': name,
-		'size': size
-	}
+exports.generateBundleInfoObject = async (folders) =>{
 
-	outputObj['modules'] = [];
-	modules.forEach(module => {
-		const {size, name} = module;
-		outputObj['modules'].push({
-			'name': name,
-			'size': size
+	// Generate stats.json
+	// webpack --profile --json > stats.json
+	console.log('folders in io.js', folders)
+	let i = 0;	
+	let fileName;
+
+	const outputBundleObjectsArray = [];
+
+	for(let folder of folders){
+		fileName = folder.replaceAll(':','');
+		fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}` : `stats-${fileName.replaceAll('/','-')}`;
+		console.log("stats-folder.replaceAll('\\','-') :", fileName.replaceAll('\\','-'));
+		console.log('fileName ', fileName);
+		const filepath = path.resolve(appDir, fileName);
+		console.log('filepath: ', filepath);
+
+		//If stats file does not exist then create
+		if(!fs.existsSync( `${filepath}.json` ) ){
+			const {stdout, stderr} = await exec(`webpack --profile --json > ${appDir}/${fileName}.json`,{cwd: folder});
+
+			if (stderr) {
+				console.log('stderr', stderr);
+			} else {
+				console.log('stdout', stdout);
+			}
+			i += 1;
+		}
+
+		//Read from stats file and store in outputBundleObjectsArray
+		const outputObj = {};
+		const rawStats = fs.readFileSync(`${appDir}/${fileName}.json`);
+		const stats = JSON.parse(rawStats);
+		const {assets, modules} = stats;
+		let totalSize = 0;
+
+		// Set folder property
+		outputObj['folder'] = folder;
+
+		// Fetch assets 
+		outputObj['assets'] = {};
+		assets.forEach(asset => {
+			const { name, size } = asset;
+			const type = name.split('.').pop();
+			totalSize += size;
+			if (outputObj['assets'].hasOwnProperty(type)) {
+				outputObj['assets'][type].push({ 'name': name, 'size': size })
+			} else {
+				outputObj['assets'][type] = [{'name': name, 'size': size}];
+			}
 		})
-	})
 
-	// return JSON.stringify(outputObj);
-	return outputObj;
-}
+		// Fetch modules
+		outputObj['modules'] = [];
+		modules.forEach(module => {
+			const {size, name} = module;
+			outputObj['modules'].push({
+				'name': name,
+				'size': size
+			})
+		})
+
+		// Calculate total asset sizes
+		outputObj['sizes'] = {};
+		for (type in outputObj['assets']) {
+			outputObj['sizes'][type] = 0; 
+			outputObj['assets'][type].forEach(asset => {
+				outputObj['sizes'][type] += asset.size;
+			})
+		}
+
+		// Set total bundle size
+		outputObj['sizes']['total'] = totalSize;
+		
+		outputBundleObjectsArray.push({...outputObj});
+
+
+	};
+	console.log('folders', folders);
+
+	return outputBundleObjectsArray;
+}	
+

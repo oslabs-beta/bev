@@ -3,8 +3,9 @@ import ReactFlow, { isNode } from 'react-flow-renderer';
 import { mapDepCruiserJSONToReactFlowElements } from './mapping';
 
 let dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));const nodeWidth = 150;
+dagreGraph.setDefaultEdgeLabel(() => ({}));
 
+const nodeWidth = 150;
 const nodeHeight = 50;
 let lowestLocalYPosition = 0;
 let maxLocalXPosition = 0;

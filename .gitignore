@@ -112,7 +112,19 @@ app/render/html/
 #ignore out files
 out/
 release/
+out/
 
 # results
 results.json
 dependency-graph.svg
+<<<<<<< HEAD
+=======
+stats.json
+
+# lock files
+package-lock.json
+yarn.lock
+
+# electron builder
+electron-builder.json
+>>>>>>> font-style
