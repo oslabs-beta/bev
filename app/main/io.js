@@ -220,8 +220,6 @@ exports.generateBundleInfoObject = async (folders) =>{
 */
 exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
 
-
-
   // Update `depCruiserResults` resolved names (cj -> es6)
   // e.g. 'node_modules/react-flow-renderer/dist/ReactFlow.js' -> 'node_modules/react-flow-renderer/dist/ReactFlow.esm.js'
   // Traverse `depCruiserResults.modules`, then `dependencies`
@@ -319,4 +317,40 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
 	
 	// Return mutated depCruiserResults Object
 	return depCruiserResults;
+}
+
+exports.saveResultsToHistory = (folders, depResults, bundleResults) => {
+
+	// If json is preexisting
+
+	// If json does not exist yet
+
+	// console.log('folders in io.js', folders)
+	// let i = 0;	
+	// let fileName;
+
+	// const dateTag = new Date().toISOString().slice(0,19).replace('T','').replaceAll(':', '-').replaceAll('-','');
+	// const outputBundleObjectsArrayRAW = [];
+	// for(let folder of folders){
+	// 	fileName = folder.replaceAll(':','');
+	// 	fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}-${dateTag}` : `stats-${fileName.replaceAll('/','-')}-${dateTag}`;
+	// 	console.log("stats-folder.replaceAll('\\','-') :", fileName.replaceAll('\\','-'));
+	// 	console.log('fileName ', fileName);
+	// 	const filepath = path.resolve(appDir, fileName);
+	// 	console.log('filepath: ', filepath);
+
+
+	// 	//Read from stats file and store in outputBundleObjectsArray
+	// 	const outputObj = {};
+	// 	const rawStats = fs.readFileSync(`${filepath}.json`);
+	// 	const stats = JSON.parse(rawStats);
+	// 	outputBundleObjectsArrayRAW.push(stats);
+	// 	const {assets, modules} = stats;
+	// 	let totalSize = 0;
+
+
+}
+
+exports.getJSONHistory = (folders) => {
+
 }

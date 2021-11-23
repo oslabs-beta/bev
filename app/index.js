@@ -85,15 +85,31 @@ ipcMain.on( 'app:on-folder-open', ( event, folder ) => {
 
 // Listen to analyze dependencies event
 ipcMain.handle( 'app:on-analyze', async ( event, folders ) => {
+
   let dependencyResults, bundleResults;
-  try {
-    dependencyResults = io.generateDependencyObject(folders);
-    // Run `webpack --json > stats.json` in the terminal to generate bundle stats
-    bundleResults = await io.generateBundleInfoObject(folders); // Returns an object {bundleStatsRaw: Array, bundleStats, Array}
-    dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw);
-  } catch(err) {
-    console.log('there was an error in handling dependency analysis\n', err);
-    return {error: true, msg: err};
+  // Check if want to generate new JSONs 
+  const generateNew = true; // Pass in app:on-analyze parameter called `generateNew` or something
+
+  if (generateNew) {
+    try {
+      dependencyResults = io.generateDependencyObject(folders);
+      // Run `webpack --json > stats.json` in the terminal to generate bundle stats
+      bundleResults = await io.generateBundleInfoObject(folders); // Returns an object {bundleStatsRaw: Array, bundleStats, Array}
+      dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw);
+
+      // Save results in JSON history
+      io.saveResultsToHistory(folders, dependencyResults, bundleResults);
+
+    } catch(err) {
+      console.log('there was an error in handling dependency analysis\n', err);
+      return {error: true, msg: err};
+    }
+  }
+
+  // When generateNew is false
+  else {
+    // Get JSON history for the particular file
+    [dependencyResults, bundleResults] = io.getJSONHistory(folders);
   }
 
   const output = {dependencyResults: dependencyResults, bundleResults: bundleResults.bundleStats};
