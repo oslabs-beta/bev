@@ -13,9 +13,8 @@ const exec = util.promisify(require('child_process').exec);
 const notification = require( './notification' );
 
 // Get application directory
-// const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
-const appDir = path.resolve('./BEV-project-files' );
-// const appDir = path.resolve('/BEV-project-files' );
+const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
+//const appDir = path.resolve('./BEV-project-files' );
 
 // Folder json name
 const folderName = 'folders.json';
@@ -258,4 +257,27 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
 	
 	// Return mutated depCruiserResults Object
 	return depCruiserResults;
+}
+
+// bundleResults -> Array of Objects
+// dependencyResults -> Object
+/*
+| ./Users/toopham/BEV-project-files
+	| home-stats.json
+	| search-stats.json
+	| nav-stats.json
+
+
+
+	| home
+		| BEV-project-files
+			| stats.json -->array of stats.json + depedencyResults
+	| search
+		| BEV-project-files
+	| nav
+		| BEV-project-files
+*/
+exports.saveStates = ({bundleResults, dependencyResults}) => {
+	
+	//loop through bundleResults array and save into appropriate folder
 }
