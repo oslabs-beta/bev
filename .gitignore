@@ -117,3 +117,6 @@ release/
 # results
 results.json
 dependency-graph.svg
+
+# BEV project files
+BEV-project-files

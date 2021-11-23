@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleNodeColor, handleEdgeType, handleEdgeStyle } from './configs';
+import { handleAnimated, handleNodeColor, handleEdgeType, handleEdgeStyle } from './configs';
 
 const refactorNodesForSharedDeps = (elementsObj) => {
   console.log('elementsObj', elementsObj)
@@ -79,7 +79,7 @@ export const mapDepCruiserJSONToReactFlowElements = (input) => {
     // Get edges
     for (let i = 0; i < arrayOfModules.length; i += 1) {
         arrayOfModules[i].dependencies.forEach((dep, j) => {
-            const { resolved, moduleSystem, dependencyTypes, module } = dep;
+            const { resolved, moduleSystem, dependencyTypes, module, active } = dep;
             modules[resolved] = {module: module, dependencyType: dependencyTypes[0]};
             const newEdge = {
                 id: `e${i}-${sources.indexOf(resolved)}`,
@@ -87,9 +87,10 @@ export const mapDepCruiserJSONToReactFlowElements = (input) => {
                 target: String(sources.indexOf(resolved)),
                 arrowHeadType: 'arrowclosed',
                 // animated: handleAnimated(modules[resolved].dependencyType),
-                animated: false,
-                style: handleEdgeStyle(dependencyTypes[0]),
-                type: handleEdgeType(dependencyTypes[0])
+                animated: handleAnimated(dependencyTypes[0], active ?? false),
+                style: handleEdgeStyle(dependencyTypes[0], active ?? false),
+                // style: handleEdgeStyle(dependencyTypes[0]),
+                // type: handleEdgeType(dependencyTypes[0]),
             }
             // if (newEdge.type === "straight") edges.push(newEdge);
             edges.push(newEdge);

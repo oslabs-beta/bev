@@ -8,6 +8,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import { LocalNodeComponent, DefaultNodeComponent } from '../node-handling/styling';
 import { mapToElements } from '../node-handling/reposition'
+import Legend from './Legend';
 import dagre from 'dagre';
 
 // React flow props, independent of Diagram hooks
@@ -68,7 +69,7 @@ const Diagram = ({ resultElements, bundleInfo, initialDiagramLoad, setInitialDia
       </div>
       <ReactFlow
         elements={elements}
-        onElementClick={(evt, emt) => setClickedElement(emt)}
+        onElementClick={(_, emt) => setClickedElement(emt)}
         onElementsRemove={onElementsRemove}
         onConnect={onConnect}
         onLoad={onLoad}
@@ -77,6 +78,7 @@ const Diagram = ({ resultElements, bundleInfo, initialDiagramLoad, setInitialDia
         className="react-flow-fix"
         nodeTypes={nodeTypes}
       >
+        {/* <Legend /> */}
         <MiniMap
           nodeStrokeColor={(n) => {
             if (n.style?.background) return n.style.background;
