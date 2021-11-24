@@ -28,9 +28,16 @@ module.exports = {
 				},
 			},
 			{
-				test: /\.css$/,
+				test: /\.(css)$/,
 				exclude: /node_modules/,
-				use: ['style-loader', 'css-loader', 'sass-loader'],
+				use: ['style-loader', 'css-loader'],
+			},
+			{
+				test: /\.(jpe?g|png|gif|svg)$/i, 
+				loader: 'file-loader',
+				// options: {
+				// name: '/app/render/assets/[name].[ext]'
+				// }
 			},
 			{ test: /\.json$/, loader: 'json-loader' },
 		]

@@ -23,11 +23,11 @@ window.deleteFolder = function ( itemId ) {
 	// Send event to the main thread
 	ipcRenderer.invoke( 'app:on-folder-delete', { id: itemId, folderpath } )
 		.then(folders => {
-			const analyzeButton = document.getElementById('anal-button');
+			const projectButton = document.getElementById('create-project');
 			console.log('FOLDERS AFTER DELETE ', folders[0]);
-			folders[0] ? analyzeButton.disabled = false : analyzeButton.disabled = true;
+			folders[0] ? projectButton.disabled = false : projectButton.disabled = true;
 		}
-	);	
+	);
 };
 
 exports.displayFolders = ( folders = [] ) => {
@@ -48,9 +48,9 @@ exports.displayFolders = ( folders = [] ) => {
 			folderListElem.appendChild( itemDomElem );
 	} );
 
-	const analyzeButton = document.getElementById('anal-button');
+	const projectButton = document.getElementById('create-project');
 	// Logic to tone up or down the 'Analyze Dependencies' button based on if folders have been selected
-	!folders[0] ? analyzeButton.disabled = true : analyzeButton.disabled = false;
+	!folders[0] ? projectButton.disabled = true : projectButton.disabled = false;
 };
 
 window.analyzeDep = function () {
@@ -58,11 +58,16 @@ window.analyzeDep = function () {
 	const folderObjs = Array.from(folderNodes);
 	const folders = folderObjs.map( node => node.getAttribute('data-folderpath'))
 
+	const loadProject = document.getElementById('loading');
+	loadProject.innerText = 'Loading...';
+	loadProject.click();
+
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
 		//change the value of a dom element.
-		const trigger = document.getElementById('trigger');
-		trigger.value = results;
-		trigger.click();
+		const startProject = document.getElementById('start-project');
+		startProject.value = JSON.stringify(results);
+		startProject.click();
+
 	});
 
 };

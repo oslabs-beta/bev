@@ -84,7 +84,17 @@ ipcMain.on( 'app:on-folder-open', ( event, folder ) => {
 } );
 
 // Listen to analyze dependencies event
-ipcMain.handle( 'app:on-analyze', ( event, folders ) => {
-	const results = io.generateDependencyObject(folders);
-	return results;
+ipcMain.handle( 'app:on-analyze', async ( event, folders ) => {
+	let dependencyResults = io.generateDependencyObject(folders);
+
+    // Run `webpack --json > stats.json` in the terminal to generate bundle stats
+    const bundleResults = await io.generateBundleInfoObject(folders); // Returns an object {bundleStatsRaw: Array, bundleStats, Array}
+    
+
+    // dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw);
+
+    console.log('bundleResults', bundleResults);
+    console.log('dependencyResults', dependencyResults);
+	const output = {dependencyResults: dependencyResults, bundleResults: bundleResults.bundleStats};
+    return output;
 } );

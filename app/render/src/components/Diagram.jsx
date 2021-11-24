@@ -1,153 +1,73 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
 import ReactFlow, {
   removeElements,
   addEdge,
   MiniMap,
   Controls,
   Background,
-  isNode,
 } from 'react-flow-renderer';
-import { preprocess, exampleData } from '../data/nodes';
-// import { useAsync } from 'react-use';
+import { LocalNodeComponent, DefaultNodeComponent } from '../node-handling/styling';
+import { mapToElements } from '../node-handling/reposition'
 import dagre from 'dagre';
 
-const dagreGraph = new dagre.graphlib.Graph();
-dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-const nodeWidth = 150;
-const nodeHeight = 50;
-let lowestLocalYPosition = 0;
-let lowestLocalXPosition = 0;
-const getLayoutedElements = (elements, direction = 'LR') => {
-  // const isHorizontal = direction === 'LR';
-  // dagre library changes the direction of the chart?
-  dagreGraph.setGraph({ rankdir: direction });
-  // const localEdges = elements.edges.filter(e => e.type === 'local' || e.type === 'root');
-  const localElements = [...elements.localDependencies, ...elements.edges];
-
-  // creates each element (node) with the correct edges
-  localElements.forEach((el) => {
-    if (isNode(el)) {
-      dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
-    } else {
-      dagreGraph.setEdge(el.source, el.target);
-    }
-  });
-
-  dagre.layout(dagreGraph);
-  const output = [];
-  localElements.forEach((el, index) => {
-    if (isNode(el)) {
-      const nodeWithPosition = dagreGraph.node(el.id);
-      // if isHorizontal is true, then assign the elements a different position based on orientation
-      // el.targetPosition = isHorizontal ? 'left' : 'bottom';
-      // el.sourcePosition = isHorizontal ? 'right' : 'top';
-
-      // el.targetPosition = 'top';
-      // el.sourcePosition = 'bottom';
-
-      el.position = {
-        x: nodeWithPosition.x - nodeWidth / 1.5 + Math.random() / 1000,
-        y: nodeWithPosition.y - nodeHeight / 1.5,
-      };
-      console.log('el', el);
-      if (index === 0) lowestLocalYPosition = el.position.y, lowestLocalXPosition = el.position.x;
-      if (lowestLocalYPosition < el.position.y) lowestLocalYPosition = el.position.y;
-      if (lowestLocalXPosition < el.position.x) lowestLocalXPosition = el.position.x;
-      output.push(el);
-    }
-  });
-  return output;
-};
-const setThirdPartyDepPositions = (elements) => {
-  console.log('lowestLocalYPosition', lowestLocalYPosition)
-  const thirdPartyNodes = elements.thirdPartyDependencies;
-  thirdPartyNodes.reverse();
-  console.log('thirdPartyNodes', thirdPartyNodes)
-  return thirdPartyNodes.map((el, index)=> {
-    if (isNode(el)) {
-      dagreGraph.setNode(el.id, { width: nodeWidth, height: nodeHeight });
-      const nodeWithPosition = dagreGraph.node(el.id);
-      console.log('3rd-party nodeWithPosition', nodeWithPosition);
-      // el.targetPosition = 'bottom';
-      // el.sourcePosition = 'top';
-      el.targetPosition = 'right';
-      el.sourcePosition = 'left';
-      el.position = {
-
-        // x: nodeWithPosition.width - (nodeWidth * (index+1))  + Math.random() / 1000 + lowestLocalXPosition,
-        // y: nodeWithPosition.height - nodeHeight / 1.5 + lowestLocalYPosition + (2*nodeHeight),
-        y: nodeWithPosition.width - (nodeWidth * (index+1))/1.5  + Math.random() / 1000 + lowestLocalYPosition,
-        x: nodeWithPosition.height - nodeHeight + lowestLocalXPosition + (2*nodeHeight) + nodeWidth,
-      };
-      console.log('3rd-party node', el);
-    }
-    return el;
-  })
-}
-
-
+// React flow props, independent of Diagram hooks
 const onLoad = (reactFlowInstance) => {
   console.log('flow loaded:', reactFlowInstance);
   reactFlowInstance.fitView();
 };
 
-
-
-let allNodesAndEdges;
-const mapToElements = (resultElements) => {
-  const preprocessedNodes = preprocess(resultElements);
-  const nodes = getLayoutedElements(preprocessedNodes);
-  const thirdPartyDepNodes = setThirdPartyDepPositions(preprocessedNodes);
-  // return [...nodes, ...thirdPartyDepNodes, ...preprocessedNodes.edges];
-  return {
-    localNodes: nodes,
-    thirdPartyNodes: thirdPartyDepNodes,
-    edges: preprocessedNodes.edges
-  }
+const nodeTypes = {
+  local: LocalNodeComponent,
+  default: DefaultNodeComponent
 }
-let clicked = false;
 
-const Diagram = ({ resultElements }) => {
-  console.log('RESULTELEMENTS BEFORE PREPROCESS', resultElements)
-  // if (!resultElements.hasOwnProperty('localNodes')) allNodesAndEdges = mapToElements(resultElements);
-  if (!clicked) allNodesAndEdges = mapToElements(resultElements);
-  const [elements, setElements]= useState(!clicked ? [...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...allNodesAndEdges.edges] : []);
+// let nodesAndEdges = allNodesAndEdges;
+let nodesAndEdges;
+
+const Diagram = ({ resultElements, bundleInfo, initialDiagramLoad, setInitialDiagramLoad }) => {
+  // On first load, reinitialize dagre graph
+  if (!initialDiagramLoad) {
+    const dagreGraph = new dagre.graphlib.Graph();
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
+    nodesAndEdges = mapToElements(resultElements);
+  } 
+
+  // Diagram hooks
+  const [elements, setElements]= useState(!initialDiagramLoad ? [...nodesAndEdges.localNodes, ...nodesAndEdges.thirdPartyNodes, ...nodesAndEdges.edges] : []);
   const [clickedElement, setClickedElement] = useState({});
+
+
+  // React Flow props, contingent on hooks
   const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
   const onConnect = (params) => setElements((els) => addEdge(params, els));
 
+  // Toggle edge animation on node click
   useEffect(() => {
-    console.log("useEffect triggered!")
     if (clickedElement.hasOwnProperty('id')) {
-      clicked = true;
+      setInitialDiagramLoad(true);
       console.log('if block triggered')
       const id = clickedElement.id;
       const newEdges = [];
-      allNodesAndEdges.edges.forEach(edge => {
+      nodesAndEdges.edges.forEach(edge => {
         if (edge.source === id) edge.animated = !edge.animated;
         if (edge.target === id) edge.animated = !edge.animated;
         newEdges.push(edge);
       })
       console.log('click', clickedElement);
-      setElements([...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...newEdges]);
+      setElements([...nodesAndEdges.localNodes, ...nodesAndEdges.thirdPartyNodes, ...newEdges]);
 
     } else {
-      console.log('else block triggered')
-      setElements([...allNodesAndEdges.localNodes, ...allNodesAndEdges.thirdPartyNodes, ...allNodesAndEdges.edges]);
+      console.log('else block triggered');
+      setElements([...nodesAndEdges.localNodes, ...nodesAndEdges.thirdPartyNodes, ...nodesAndEdges.edges]);
     }
   }, [clickedElement, resultElements])
 
   return (
     <>
       <div id="controls" className="controls">
-        {/* <button onClick={() => onLayout('TB')}>vertical layout</button>
-        <button onClick={() => onLayout('LR')}>horizontal layout</button> */}
       </div>
       <ReactFlow
         elements={elements}
-        // onElementClick={(evt, emt) => onElementClick(evt, emt)}
         onElementClick={(evt, emt) => setClickedElement(emt)}
         onElementsRemove={onElementsRemove}
         onConnect={onConnect}
@@ -155,6 +75,7 @@ const Diagram = ({ resultElements }) => {
         snapToGrid={true}
         snapGrid={[15, 15]}
         className="react-flow-fix"
+        nodeTypes={nodeTypes}
       >
         <MiniMap
           nodeStrokeColor={(n) => {
@@ -162,12 +83,10 @@ const Diagram = ({ resultElements }) => {
             if (n.type === 'input') return '#0041d0';
             if (n.type === 'output') return '#ff0072';
             if (n.type === 'default') return '#1a192b';
-
             return '#eee';
           }}
           nodeColor={(n) => {
             if (n.style?.background) return n.style.background;
-
             return '#fff';
           }}
           nodeBorderRadius={2}
@@ -177,7 +96,6 @@ const Diagram = ({ resultElements }) => {
       </ReactFlow>
     </>
   );
-
 };
 
 export default Diagram;
