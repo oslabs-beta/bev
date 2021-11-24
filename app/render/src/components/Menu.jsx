@@ -12,6 +12,9 @@ const Menu = (props) =>{
       <li onClick={()=> props.setTab('dashboard')} className={props.tab=='dashboard'? 'active-li': 'notactive-li'}>
         <span>Dashboard</span>
       </li>
+			<li onClick={()=> props.setTab('history')} className={props.tab=='history'? 'active-li': 'notactive-li'}>
+          <span>Bundle History</span>
+      </li>
       <li onClick={()=> props.setTab('tree')} className={props.tab=='tree'? 'active-li': 'notactive-li'}>
           <span>Dependency Graph</span>
       </li>

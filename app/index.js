@@ -52,8 +52,8 @@ app.on( 'activate', () => {
 } );
 
 /*
-The following ipcMain are analogous to controllers in express;
-They listen for a "route" sent from the ipcRenderer process and call the corresponding middleware;
+The following ipcMain are analogous to controllers in express to handle "API" calls from frontend;
+They listen for a "route" sent from the ipcRenderer process and call the corresponding middleware from io;
 */
 
 // Return list of folders
@@ -96,12 +96,12 @@ ipcMain.handle( 'app:on-analyze', async ( event, folders ) => {
 
 	// dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw);
 
-	console.log('bundleResults', bundleResults);
-	console.log('dependencyResults', dependencyResults);
+	//console.log('bundleResults', bundleResults);
+	//console.log('dependencyResults', dependencyResults);
 
 	const output = {dependencyResults: dependencyResults, bundleResults: bundleResults.bundleStats};
   
 	//destructure bundleResults to save eac bundle stats into each folder
-	io.saveStats(output);
+	//io.saveStats(output);
 	return output;
 } );
