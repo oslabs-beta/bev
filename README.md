@@ -37,10 +37,42 @@ Select the version history of which bundle file to view to see how the bundle ha
 ## How to Contribute
 
 If you would like to contribute, clone the repo.
- 
-```
+ ```
  git clone https://github.com/oslabs-beta/bev.git
-```
+ ```
+###Run these commands in the following order
+ 
+Install dependencies by using the following command
+ ```
+ npm i
+ ```
+To bundle all the files together, use
+ ```
+ npm run build
+ ```
+To run the development build, use
+ ```
+ npm run start
+ ```
+To build the Electron app, use
+ ```
+ npm run pack
+ ```
+ 
+Electron-builder is configured to build for Mac, Windows and Linux. To configure which platform to build for, go into ```package.json``` and edit the scripts
+ ```
+  "scripts": {
+    "start": "electron .",
+    "build": "cross-env NODE_ENV=development webpack",
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder -mwl"
+  },
+ ```
+ In the "pack" script, add append "m", "w", or "l" after the "-" to specify which platforms to build for.
+ To build for mac only, edit the pack script to
+ ```
+ "pack": "electron-builder -m"
+ ```
  
 #### Features we’d like to implement
 
