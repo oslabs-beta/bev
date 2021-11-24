@@ -18,7 +18,7 @@ bev parses through your project’s file structure to generate an interactive de
 
 Click on any node to see which children components rely on it. 
 
-![Dependency Graph](https://i.imgur.com/4wtujgG.gif)
+![Dependency Graph](https://i.imgur.com/QDyFgSs.gif)
 
 #### Bundle Sizer
 
