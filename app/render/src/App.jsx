@@ -10,14 +10,15 @@ import Diagram from './components/Diagram';
 import NavBar from './components/NavBar';
 import ControlPanel from './components/ControlPanel';
 import Loading from './components/Loading';
-// import ReactBootstrap from 'react-bootstrap';
-// import Vue from 'vue';
+import ReactBootstrap from 'react-bootstrap';
+import Vue from 'vue';
 
 /*
-Implemented react-router based on react-router v6 which introduced braking changes
+	Implemented react-router based on react-router v6 which introduced braking changes
 */
 const App = () => {
 	const [state, setState] = useState({default: true});
+	const [bundleHistory, setBH] = useState([])
 	const [bundleInfo, setBundleInfo] = useState([]); 
 	const [initialDiagramLoad, setInitialDiagramLoad] = useState(false);
 	return (
@@ -25,21 +26,13 @@ const App = () => {
 			<div className="main-container">
 				<div className="top-container"><NavBar setInitialDiagramLoad={setInitialDiagramLoad}/></div>
 				<Routes>
-					<Route path="/" element={<Main setState={setState} bundleInfo={bundleInfo} setBundleInfo={setBundleInfo} />} />
-					{console.log('state', state)}
-					{console.log('initialDiagramLoad', initialDiagramLoad)}
-					{/* 
-					/chart is being passed a component Diagram which is being passed resultsElement as the property;
-					resultsElement contains the results.json file that we use to generate the graph
-					 */}
+					<Route path="/" element={<Main setState={setState} bundleHistory={bundleHistory} setBH={setBH} bundleInfo={bundleInfo} setBundleInfo={setBundleInfo} />} />
 					<Route path="/loading" element={<Loading bundleInfo={bundleInfo} initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} bundleInfo={bundleInfo}  resultElements={state}/>} />
-					<Route path="/controlpanel" element={<ControlPanel initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} bundleInfo={bundleInfo}  resultElements={state} />} />
-					{/* <Route path="/chart" element={<Diagram initialDiagramLoad={initialDiagramLoad} setInitialDiagramLoad={setInitialDiagramLoad} resultElements={state} />} /> */}
+					<Route path="/controlpanel" element={<ControlPanel initialDiagramLoad={initialDiagramLoad} setBH={setBH} bundleHistory={bundleHistory} setInitialDiagramLoad={setInitialDiagramLoad} bundleInfo={bundleInfo}  resultElements={state} />} />
 				</Routes>
 			</div>
 		</HashRouter>
 	);
 }
-
 
 export default App;

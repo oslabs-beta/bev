@@ -63,11 +63,19 @@ window.analyzeDep = function () {
 	loadProject.click();
 
 	ipcRenderer.invoke( 'app:on-analyze', folders).then( results =>  {
+		console.log('results', results)
+		if (results.error) {
+			const loadingContent = document.querySelector('#loading-content');
+			loadingContent.parentElement.removeChild(loadingContent);
+			const startButton = document.querySelector('#create-project');
+			startButton.innerText = `${results.msg} \n Reload app and choose another project`;
+			startButton.appendChild(errorText);
+			return;
+		}
 		//change the value of a dom element.
 		const startProject = document.getElementById('start-project');
 		startProject.value = JSON.stringify(results);
 		startProject.click();
-
 	});
 
 };

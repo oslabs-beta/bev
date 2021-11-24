@@ -13,12 +13,60 @@ const exec = util.promisify(require('child_process').exec);
 const notification = require( './notification' );
 
 // Get application directory
-// const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
-const appDir = path.resolve('./BEV-project-files' );
-// const appDir = path.resolve('/BEV-project-files' );
+const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
+//const appDir = path.resolve('./BEV-project-files' );
 
 // Folder json name
 const folderName = 'folders.json';
+
+
+//Helper function
+const cleanStats = (stats, folder) => {
+	const {assets, modules} = stats;
+	let totalSize = 0;
+	outputObj = {};
+
+	// Set folder property
+	outputObj['folder'] = folder;
+	outputObj['date'] = new Date().toISOString().slice(0,19).replace('T','').replaceAll(':', '-').replaceAll('-','');
+
+	// Fetch assets 
+	outputObj['assets'] = {};
+	assets.forEach(asset => {
+		const { name, size } = asset;
+		const type = name.split('.').pop();
+		totalSize += size;
+		if (outputObj['assets'].hasOwnProperty(type)) {
+			outputObj['assets'][type].push({ 'name': name, 'size': size })
+		} else {
+			outputObj['assets'][type] = [{'name': name, 'size': size}];
+		}
+	})
+
+	// Fetch modules
+	outputObj['modules'] = [];
+	modules.forEach(module => {
+		const {size, name} = module;
+		outputObj['modules'].push({
+			'name': name,
+			'size': size
+		})
+	})
+
+	// Calculate total asset sizes
+	outputObj['sizes'] = {};
+	for (type in outputObj['assets']) {
+		outputObj['sizes'][type] = 0; 
+		outputObj['assets'][type].forEach(asset => {
+			outputObj['sizes'][type] += asset.size;
+		})
+	}
+
+	// Set total bundle size
+	outputObj['sizes']['total'] = totalSize;
+	return outputObj;
+}
+
 
 // Get list of Folders
 exports.getFolders = () => {
@@ -90,9 +138,9 @@ exports.watchFiles = ( win ) => {
 exports.generateDependencyObject = (folderArr) =>{
 	const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE = folderArr;
 	const cruiseOptions = {
-		// includeOnly: ["src", "assets", "node_modules"],
+		includeOnly: ["src", "assets", "node_modules"],
 		exclude: {
-			// path: ["release", "public", "dist"]
+			path: ["release", "public", "out", "dist", "__tests__"]
 		},
 		doNotFollow: {
 			path: "node_modules",
@@ -104,6 +152,7 @@ exports.generateDependencyObject = (folderArr) =>{
 				},
 			},
 		},
+		moduleSystems: ['amd', 'es6', 'tsd']
 	};
 	let json;
 	try {
@@ -132,102 +181,172 @@ exports.generateBundleInfoObject = async (folders) =>{
 
 	// Generate stats.json
 	// webpack --profile --json > stats.json
-	console.log('folders in io.js', folders)
-	let i = 0;	
+	console.log('folders in io.js', folders)	
 	let fileName;
 	const dateTag = new Date().toISOString().slice(0,19).replace('T','').replaceAll(':', '-').replaceAll('-','');
 	const outputBundleObjectsArray = [];
 	const outputBundleObjectsArrayRAW = [];
 	for(let folder of folders){
+		//initialize statsArr to store history of stats for folder
+		let statsArr = [];
 		fileName = folder.replaceAll(':','');
-		fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}-${dateTag}` : `stats-${fileName.replaceAll('/','-')}-${dateTag}`;
+		fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}` : `stats-${fileName.replaceAll('/','-')}`;
 		console.log("stats-folder.replaceAll('\\','-') :", fileName.replaceAll('\\','-'));
-		console.log('fileName ', fileName);
 		const filepath = path.resolve(appDir, fileName);
-		console.log('filepath: ', filepath);
+		const statspath = path.resolve(folder, 'bev-generated-stats.json');
 
 		//If stats file does not exist then create
-		if(!fs.existsSync( `${filepath}.json` ) ){
-			const {stdout, stderr} = await exec(`webpack --profile --json > ${filepath}.json`,{cwd: folder});
+		//<Place if statement when we are ready to not generate new stats>--------------------------
+			//create stats.json to transfer to the filepath stats array
+			const {stdout, stderr} = await exec(`webpack --profile --json > bev-generated-stats.json`,{cwd: folder});
 
 			if (stderr) {
-				console.log('stderr', stderr);
+				console.log('stderr: ', stderr);
 			} else {
-				console.log('stdout', stdout);
+				console.log('stdout: ', stdout);
 			}
-			i += 1;
+
+
+			//Read from stats file and store in outputBundleObjectsArray
+			const rawStats = fs.readFileSync(statspath);
+			const stats = JSON.parse(rawStats);
+			
+			//delete file after we are done
+			fs.unlinkSync(statspath);
+
+			//Clean up stats and retrieve only what we need
+			const outputObj = cleanStats(stats, folder);
+
+			//if stats history for the folder does not exist then create file
+		if(!fs.existsSync( `${filepath}.json` ) ){
+			statsArr.push(outputObj);
+			fs.writeFile(`${filepath}.json` , JSON.stringify(statsArr), 'utf8', ()=>console.log('New stats file created successfully'));
+		}
+		//else if it already exist, then read from file, append to it the new outputObj.
+		else{
+			// Get the json obj from folders.json
+			const statsRaw = fs.readFileSync(`${filepath}.json`);
+
+			// Parse to turn json obj into an array of stats history
+			statsArr.push(outputObj);
+			//Latest stats version is located at index 0
+			statsArr = statsArr.concat(JSON.parse(statsRaw));
+			fs.writeFile(`${filepath}.json` , JSON.stringify(statsArr), 'utf8', ()=>console.log('New stats history appended.'));
 		}
 
-		//Read from stats file and store in outputBundleObjectsArray
-		const outputObj = {};
-		const rawStats = fs.readFileSync(`${filepath}.json`);
-		const stats = JSON.parse(rawStats);
-		outputBundleObjectsArrayRAW.push(stats);
-		const {assets, modules} = stats;
-		let totalSize = 0;
-
-		// Set folder property
-		outputObj['folder'] = folder;
-
-		// Fetch assets 
-		outputObj['assets'] = {};
-		assets.forEach(asset => {
-			const { name, size } = asset;
-			const type = name.split('.').pop();
-			totalSize += size;
-			if (outputObj['assets'].hasOwnProperty(type)) {
-				outputObj['assets'][type].push({ 'name': name, 'size': size })
-			} else {
-				outputObj['assets'][type] = [{'name': name, 'size': size}];
-			}
-		})
-
-		// Fetch modules
-		outputObj['modules'] = [];
-		modules.forEach(module => {
-			const {size, name} = module;
-			outputObj['modules'].push({
-				'name': name,
-				'size': size
-			})
-		})
-
-		// Calculate total asset sizes
-		outputObj['sizes'] = {};
-		for (type in outputObj['assets']) {
-			outputObj['sizes'][type] = 0; 
-			outputObj['assets'][type].forEach(asset => {
-				outputObj['sizes'][type] += asset.size;
-			})
-		}
-
-		// Set total bundle size
-		outputObj['sizes']['total'] = totalSize;
-		
-		outputBundleObjectsArray.push({...outputObj});
-
+		outputBundleObjectsArray.push(statsArr);
 
 	};
 	console.log('folders', folders);
 
 	return {bundleStatsRaw: outputBundleObjectsArrayRAW, bundleStats: outputBundleObjectsArray};
+
 }	
 
 /*
   `depCruiserResults` is an Object
   `statsResults` is an Array of Objects
 */
-exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
+exports.modifyDependencyObject = (depCruiserResults, statsResults, folders) => {
 
+  // Update `depCruiserResults` resolved names (cj -> es6)
+  // e.g. 'node_modules/react-flow-renderer/dist/ReactFlow.js' -> 'node_modules/react-flow-renderer/dist/ReactFlow.esm.js'
+  // Traverse `depCruiserResults.modules`, then `dependencies`
+    // if `d.dependencyTypes[0]` === 'npm', save `d.module`, e.g. 'react-flow-renderer' 
+    // Find matching statsResults modules, where name contains 'node_modules' + saved module, e.g. 'node_modules/react-flow-renderer'
+	console.log('FROM MODIFYDEPENDENCYOBJECT METHOD')
+
+  // Preprocess dirs into Arrays
+  let onPC;
+  if (appDir.split('').includes('\\')) onPC = true;
+  console.log('onPC', onPC)
+
+  let bevRootPath, folderPath;
+  if (onPC) {
+    bevRootPath = appDir.split('\\');
+    bevRootPath = bevRootPath.slice(0, bevRootPath.length - 1);
+    folderPath = folders[0].split('\\'); 
+  } else {
+    bevRootPath = appDir.split('/');
+    bevRootPath = bevRootPath.slice(0, bevRootPath.length - 1);
+    folderPath = folders[0].split('/');
+  }
+
+  console.log('bevRootPath', bevRootPath)
+  console.log('folderPath', folderPath);
+  let backLog = [];
+  let lastIndex;
+  for (let i = 0; i < bevRootPath.length; i += 1) {
+    if (bevRootPath[i] !== folderPath[i]) {
+      lastIndex = i;
+      break;
+    }   
+  }
+  backLog = folderPath.slice(lastIndex);
+  for (let i = 0; i < bevRootPath.length - lastIndex; i += 1) {
+    backLog.unshift('..');
+  }
+  backLog = (onPC) ? backLog.join('\\') : backLog.join('/');
+  console.log('backLog', backLog)
+
+  // Check if backLog is the same as bevRootPath
+  let modifyFilePath = true;
+  if (backLog === bevRootPath.join('\\') || backLog === bevRootPath.join('/')) modifyFilePath = false;
+
+  const newSources = {} // source: ..., newSource:...
 
   // Traverse `dependencies` array in `depCruiserResults.modules`
   depCruiserResults.modules.map(m => {
     // Add `dependencies[n].resolved` to `targetNodeNames`
+    const source = modifyFilePath ? m.source.slice(backLog.length+1) : m.source;
+    console.log('source', source)
     m.dependencies.map(d => {
-      const source = m.source;
-      const target = d.resolved;
-      for (let i = 0; i < statsResults.length; i += 1) {
+      let target = modifyFilePath ? d.resolved.slice(backLog.length + 1) : d.resolved; // Might have to change, if `target` is a node_modules that is cjs
 
+      let moduleName;
+      if (d.dependencyTypes[0] === 'npm') moduleName = d.module;
+      
+      for (let i = 0; i < statsResults.length; i += 1) {
+        // Trigger `target` update
+        if (moduleName) {
+          // console.log('module name', moduleName);
+          // console.log('source name', source);
+          // console.log('old target name', target);
+          const info = statsResults[i].modules.filter(module => module.hasOwnProperty('issuerName') && module.issuerName.slice(2) === source)
+          if (info.length > 0) {
+            for (let j = 0; j < info.length; j += 1) {
+              info[j].reasons.forEach(r => {
+                // if (r.userRequest === moduleName && info[j].name.slice(2) !== ''){
+                if (r.userRequest === moduleName){
+                  // console.log('reasons to change ',moduleName,' r.userRequest', r.userRequest, 'new target name', info[j].name);
+                  newTarget = info[j].name.slice(2);
+                  newSources[target] = newTarget;
+                  target = newTarget;
+                } 
+              })
+            }
+          }
+          // console.log('new target name', target)
+        }
+      }
+
+      d.resolved = target;
+      return d
+    })
+
+    return m;
+  })
+
+
+  depCruiserResults.modules.map(m => {
+    // Add `dependencies[n].resolved` to `targetNodeNames`
+
+    const source = modifyFilePath ? m.source.slice(backLog.length + 1) : m.source;
+    m.dependencies.map(d => {
+      const target = d.resolved; // Might have to change, if `target` is a node_modules that is cjs
+      console.log('target', target)
+      for (let i = 0; i < statsResults.length; i += 1) {
+        // Set `active` property
         const statsArrayTargetInfo = statsResults[i].modules.filter(module => module.name.slice(2) === target)
         if (statsArrayTargetInfo.length > 0) {
           statsArrayTargetInfo[0].reasons.forEach(r => {
@@ -248,6 +367,17 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
     return m;
   })
 
+
+
+  // console.log('newSources', newSources)
+  // Update module source names
+  depCruiserResults.modules.map(m => {
+    const source = modifyFilePath ? m.source.slice(backLog.length + 1) : m.source
+    if (newSources.hasOwnProperty(source) && newSources[source] !== '') m.source = newSources[source];
+    else m.source = modifyFilePath ? m.source.slice(backLog.length + 1) : m.source;
+    return m;
+  })
+
   // targetNodeNames = [...new Set(targetNodeNames)] // Remove duplicates
 
   // To find whether target dependency is used by source: is `active` true or false? 
@@ -258,4 +388,27 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
 	
 	// Return mutated depCruiserResults Object
 	return depCruiserResults;
+}
+
+// bundleResults -> Array of Objects
+// dependencyResults -> Object
+/*
+| ./Users/toopham/BEV-project-files
+	| home-stats.json
+	| search-stats.json
+	| nav-stats.json
+
+
+
+	| home
+		| BEV-project-files
+			| stats.json -->array of stats.json + depedencyResults
+	| search
+		| BEV-project-files
+	| nav
+		| BEV-project-files
+*/
+exports.saveStates = ({bundleResults, dependencyResults}) => {
+	
+	//loop through bundleResults array and save into appropriate folder
 }

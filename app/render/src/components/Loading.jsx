@@ -11,8 +11,8 @@ const Loading = (props) => {
 
 	return (
         <>
-            <div className="main-container">
-                <img style={{margin: "auto", width: "300px"}} src={loading} alt="loading..." />
+            <div className="main-container" id='loading-content'>
+                <img style={{margin: "auto", width: "500px"}} src={loading} alt="loading..." />
                 <p style={{margin:"auto", color: "black"}}>Loading... This may take a while.</p>
             </div>
         </>
