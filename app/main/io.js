@@ -163,46 +163,6 @@ exports.generateDependencyObject = (folderArr) => {
   return json;
 };
 
-exports.generateDependencyObject = (folderArr) => {
-  const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE = folderArr;
-  const cruiseOptions = {
-    includeOnly: ['src', 'assets', 'node_modules'],
-    exclude: {
-      path: ['release', 'public', 'out', 'dist', '__tests__'],
-    },
-    doNotFollow: {
-      path: 'node_modules',
-    },
-    reporterOptions: {
-      dot: {
-        theme: {
-          graph: { rankdir: 'TD' },
-        },
-      },
-    },
-    moduleSystems: ['amd', 'es6', 'tsd'],
-  };
-  let json;
-  try {
-    const cruiseResult = cruise(
-      ARRAY_OF_FILES_AND_DIRS_TO_CRUISE,
-      cruiseOptions
-    );
-
-    json = cruiseResult.output;
-
-    notification.resultsAdded(folderArr.length);
-
-    fs.writeFile('results.json', JSON.stringify(json), 'utf8', () =>
-      console.log('JSON generated complete')
-    );
-  } catch (error) {
-    console.error(error);
-  }
-
-  return json;
-};
-
 exports.generateBundleInfoObject = async (folders) => {
   // Generate stats.json
   let fileName;
@@ -214,10 +174,6 @@ exports.generateBundleInfoObject = async (folders) => {
     fileName = fileName.split('').includes('\\')
       ? `stats-${fileName.replaceAll('\\', '-')}`
       : `stats-${fileName.replaceAll('/', '-')}`;
-    console.log(
-      "stats-folder.replaceAll('\\','-') :",
-      fileName.replaceAll('\\', '-')
-    );
     const filepath = path.resolve(appDir, fileName);
     const statspath = path.resolve(folder, 'bev-generated-stats.json');
 
@@ -246,7 +202,7 @@ exports.generateBundleInfoObject = async (folders) => {
     if (!fs.existsSync(`${filepath}.json`)) {
       statsArr.push(outputObj);
       fs.writeFile(`${filepath}.json`, JSON.stringify(statsArr), 'utf8', () =>
-        console.log('New stats file created successfully')
+        console.log('New stats file created successfully');
       );
     }
     //else if it already exist, then read from file, append to it the new outputObj.
@@ -260,7 +216,7 @@ exports.generateBundleInfoObject = async (folders) => {
       //Latest stats version is located at index 0
       statsArr = statsArr.concat(JSON.parse(statsRaw));
       fs.writeFile(`${filepath}.json`, JSON.stringify(statsArr), 'utf8', () =>
-        console.log('New stats history appended.')
+        console.log('New stats history appended.');
       );
     }
 
