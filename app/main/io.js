@@ -90,7 +90,7 @@ exports.watchFiles = ( win ) => {
 exports.generateDependencyObject = (folderArr) =>{
 	const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE = folderArr;
 	const cruiseOptions = {
-		includeOnly: ["src", "assets", "node_modules"],
+		includeOnly: ["src", "assets", "node_modules", "client"],
 		exclude: {
 			// path: ["release", "public", "dist"]
 		},
@@ -218,22 +218,61 @@ exports.generateBundleInfoObject = async (folders) =>{
   `depCruiserResults` is an Object
   `statsResults` is an Array of Objects
 */
-exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
+exports.modifyDependencyObject = (depCruiserResults, statsResults, folders) => {
 
   // Update `depCruiserResults` resolved names (cj -> es6)
   // e.g. 'node_modules/react-flow-renderer/dist/ReactFlow.js' -> 'node_modules/react-flow-renderer/dist/ReactFlow.esm.js'
   // Traverse `depCruiserResults.modules`, then `dependencies`
     // if `d.dependencyTypes[0]` === 'npm', save `d.module`, e.g. 'react-flow-renderer' 
     // Find matching statsResults modules, where name contains 'node_modules' + saved module, e.g. 'node_modules/react-flow-renderer'
+	console.log('FROM MODIFYDEPENDENCYOBJECT METHOD')
+
+  // Preprocess dirs into Arrays
+  let onPC;
+  if (appDir.split('').includes('\\')) onPC = true;
+  console.log('onPC', onPC)
+
+  let bevRootPath, folderPath;
+  if (onPC) {
+    bevRootPath = appDir.split('\\');
+    bevRootPath = bevRootPath.slice(0, bevRootPath.length - 1);
+    folderPath = folders[0].split('\\'); 
+  } else {
+    bevRootPath = appDir.split('/');
+    bevRootPath = bevRootPath.slice(0, bevRootPath.length - 1);
+    folderPath = folders[0].split('/');
+  }
+
+  console.log('bevRootPath', bevRootPath)
+  console.log('folderPath', folderPath);
+  let backLog = [];
+  let lastIndex;
+  for (let i = 0; i < bevRootPath.length; i += 1) {
+    if (bevRootPath[i] !== folderPath[i]) {
+      lastIndex = i;
+      break;
+    }   
+  }
+  backLog = folderPath.slice(lastIndex);
+  for (let i = 0; i < bevRootPath.length - lastIndex; i += 1) {
+    backLog.unshift('..');
+  }
+  backLog = (onPC) ? backLog.join('\\') : backLog.join('/');
+  console.log('backLog', backLog)
+
+  // Check if backLog is the same as bevRootPath
+  let modifyFilePath = true;
+  if (backLog === bevRootPath.join('\\') || backLog === bevRootPath.join('/')) modifyFilePath = false;
 
   const newSources = {} // source: ..., newSource:...
 
   // Traverse `dependencies` array in `depCruiserResults.modules`
   depCruiserResults.modules.map(m => {
     // Add `dependencies[n].resolved` to `targetNodeNames`
-    const source = m.source; 
+    const source = modifyFilePath ? m.source.slice(backLog.length+1) : m.source;
+    console.log('source', source)
     m.dependencies.map(d => {
-      let target = d.resolved; // Might have to change, if `target` is a node_modules that is cjs
+      let target = modifyFilePath ? d.resolved.slice(backLog.length + 1) : d.resolved; // Might have to change, if `target` is a node_modules that is cjs
 
       let moduleName;
       if (d.dependencyTypes[0] === 'npm') moduleName = d.module;
@@ -241,16 +280,16 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
       for (let i = 0; i < statsResults.length; i += 1) {
         // Trigger `target` update
         if (moduleName) {
-          console.log('module name', moduleName);
-          console.log('source name', source);
-          console.log('old target name', target);
+          // console.log('module name', moduleName);
+          // console.log('source name', source);
+          // console.log('old target name', target);
           const info = statsResults[i].modules.filter(module => module.hasOwnProperty('issuerName') && module.issuerName.slice(2) === source)
           if (info.length > 0) {
             for (let j = 0; j < info.length; j += 1) {
               info[j].reasons.forEach(r => {
                 // if (r.userRequest === moduleName && info[j].name.slice(2) !== ''){
                 if (r.userRequest === moduleName){
-                  console.log('reasons to change ',moduleName,' r.userRequest', r.userRequest, 'new target name', info[j].name);
+                  // console.log('reasons to change ',moduleName,' r.userRequest', r.userRequest, 'new target name', info[j].name);
                   newTarget = info[j].name.slice(2);
                   newSources[target] = newTarget;
                   target = newTarget;
@@ -258,7 +297,7 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
               })
             }
           }
-          console.log('new target name', target)
+          // console.log('new target name', target)
         }
       }
 
@@ -273,9 +312,10 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
   depCruiserResults.modules.map(m => {
     // Add `dependencies[n].resolved` to `targetNodeNames`
 
-    const source = m.source; 
+    const source = modifyFilePath ? m.source.slice(backLog.length + 1) : m.source;
     m.dependencies.map(d => {
       const target = d.resolved; // Might have to change, if `target` is a node_modules that is cjs
+      console.log('target', target)
       for (let i = 0; i < statsResults.length; i += 1) {
         // Set `active` property
         const statsArrayTargetInfo = statsResults[i].modules.filter(module => module.name.slice(2) === target)
@@ -300,10 +340,12 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults) =>{
 
 
 
-  console.log('newSources', newSources)
+  // console.log('newSources', newSources)
   // Update module source names
   depCruiserResults.modules.map(m => {
-    if (newSources.hasOwnProperty(m.source) && newSources[m.source] !== '') m.source = newSources[m.source];
+    const source = modifyFilePath ? m.source.slice(backLog.length + 1) : m.source
+    if (newSources.hasOwnProperty(source) && newSources[source] !== '') m.source = newSources[source];
+    else m.source = modifyFilePath ? m.source.slice(backLog.length + 1) : m.source;
     return m;
   })
 

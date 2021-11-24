@@ -95,10 +95,10 @@ ipcMain.handle( 'app:on-analyze', async ( event, folders ) => {
       dependencyResults = io.generateDependencyObject(folders);
       // Run `webpack --json > stats.json` in the terminal to generate bundle stats
       bundleResults = await io.generateBundleInfoObject(folders); // Returns an object {bundleStatsRaw: Array, bundleStats, Array}
-      dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw);
+      dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw, folders);
 
       // Save results in JSON history
-      io.saveResultsToHistory(folders, dependencyResults, bundleResults);
+      // io.saveResultsToHistory(folders, dependencyResults, bundleResults);
 
     } catch(err) {
       console.log('there was an error in handling dependency analysis\n', err);
