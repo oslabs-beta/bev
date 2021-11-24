@@ -12,7 +12,7 @@ const ControlPanel = (props) =>{
 			<div className="body-container">
 				<Menu tab={tab} setTab={setTab} />
 				
-				<Display tab={tab} setTab={setTab} initialDiagramLoad={props.initialDiagramLoad} setInitialDiagramLoad={props.setInitialDiagramLoad} resultElements={props.resultElements} bundleInfo={props.bundleInfo} />
+				<Display tab={tab} setTab={setTab} setBH={props.setBH} bundleHistory={props.bundleHistory} initialDiagramLoad={props.initialDiagramLoad} setInitialDiagramLoad={props.setInitialDiagramLoad} resultElements={props.resultElements} bundleInfo={props.bundleInfo} />
 			</div>
 	);
 };

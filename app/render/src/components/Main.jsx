@@ -7,10 +7,12 @@ const Main = (props) =>{
 	const [renderLoader, setRenderLoader] = useState(false);
 	const updateState = (e) => {
 		// Access json generated
-		console.log('e.target.value', JSON.parse(e.target.value))
-		console.log('bundleResults', JSON.parse(e.target.value).bundleResults)
+		console.log('bundleResults : ', JSON.parse(e.target.value).bundleResults)
 		props.setState(JSON.parse(e.target.value).dependencyResults);
-		props.setBundleInfo(JSON.parse(e.target.value).bundleResults);
+		const bundleHistory = JSON.parse(e.target.value).bundleResults;
+		props.setBH(bundleHistory);
+		const bundleLatest = bundleHistory.map(bundle => bundle[0]);
+		props.setBundleInfo(bundleLatest);
 		
 	};
 

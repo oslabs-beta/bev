@@ -24,7 +24,7 @@ const MFESelector = ( props ) =>{
 
   return (
     <div className="mfe-selector-div">
-      <select id="mfe-selector" onClick={(e)=>mfeHandler(e)}>
+      <select id="mfe-selector" onChange={(e)=>mfeHandler(e)}>
         {options}
       </select>  
     </div>
