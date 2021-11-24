@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
+const os = require( 'os' );
 const open = require('open');
 const { cruise } = require('dependency-cruiser');
 const util = require('util');
@@ -7,7 +8,7 @@ const exec = util.promisify(require('child_process').exec);
 
 // Local dependencies
 const notification = require('./notification');
-const appDir = path.resolve('./BEV-project-files');
+const appDir = path.resolve(os.homedir(), 'BEV-project-files');
 const folderName = 'folders.json';
 
 // Get list of Folders
@@ -127,8 +128,10 @@ exports.generateBundleInfoObject = async (folders) => {
     fileName = fileName.split('').includes('\\')
       ? `stats-${fileName.replaceAll('\\', '-')}-${dateTag}`
       : `stats-${fileName.replaceAll('/', '-')}-${dateTag}`;
+    console.log(fileName);
 
     const filepath = path.resolve(appDir, fileName);
+    console.log('filepath', filepath);
 
     // If stats file does not exist then create
     if (!fs.existsSync(`${filepath}.json`)) {
