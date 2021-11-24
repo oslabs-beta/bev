@@ -31,11 +31,11 @@ window.deleteFolder = function (itemId) {
 
 // Display folders
 exports.displayFolders = (folders = []) => {
-	// Clear the folder list
+  // Clear the folder list
   const folderListElem = document.getElementById('folderlist');
   folderListElem.innerHTML = '';
 
-	// Repopulate the folder list w/ needed attributes
+  // Repopulate the folder list w/ needed attributes
   folders.forEach((folder, index) => {
     const itemDomElem = document.createElement('div');
     itemDomElem.setAttribute('id', index);
@@ -52,8 +52,8 @@ exports.displayFolders = (folders = []) => {
 
   const projectButton = document.getElementById('create-project');
 
-  // Logic to tone up or down the 'Analyze Dependencies' button 
-	// based on if folders have been selected.
+  // Logic to tone up or down the 'Analyze Dependencies' button
+  // based on if folders have been selected.
   !folders[0]
     ? (projectButton.disabled = true)
     : (projectButton.disabled = false);
@@ -67,12 +67,12 @@ window.analyzeDep = function () {
     node.getAttribute('data-folderpath')
   );
 
-	// Render loading gif
+  // Render loading gif
   const loadProject = document.getElementById('loading');
   loadProject.innerText = 'Loading...';
   loadProject.click();
 
-	// Navigates the user to a dependency graphy once analysis is complete
+  // Navigates the user to a dependency graphy once analysis is complete
   ipcRenderer.invoke('app:on-analyze', folders).then((results) => {
     const startProject = document.getElementById('start-project');
     startProject.value = JSON.stringify(results);

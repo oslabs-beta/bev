@@ -37,51 +37,50 @@ Select the version history of which bundle file to view to see how the bundle ha
 ## How to Contribute
 
 If you would like to contribute, clone the repo.
- ```
- git clone https://github.com/oslabs-beta/bev.git
- ```
-###Run these commands in the following order
+
+```
+git clone https://github.com/oslabs-beta/bev.git
+```
+
+### Build Steps
  
-Install dependencies by using the following command
- ```
- npm i
- ```
-To bundle all the files together, use
- ```
- npm run build
- ```
-To run the development build, use
- ```
- npm run start
- ```
-To build the Electron app, use
- ```
- npm run pack
- ```
+1. Install dependencies by using the following command
+  ```
+  npm i
+  ```
+2. To bundle all the files together, use:
+  ```
+  npm run build
+  ```
+3. To run the development build, use:
+  ```
+  npm run start
+  ```
+4. To build the Electron app, use:
+  ```
+  npm run pack
+  ```
  
-Electron-builder is configured to build for Mac, Windows and Linux. To configure which platform to build for, go into ```package.json``` and edit the scripts
- ```
-  "scripts": {
-    "start": "electron .",
-    "build": "cross-env NODE_ENV=development webpack",
-    "postinstall": "electron-builder install-app-deps",
-    "pack": "electron-builder -mwl"
-  },
- ```
- In the "pack" script, add append "m", "w", or "l" after the "-" to specify which platforms to build for.
- To build for mac only, edit the pack script to
- ```
- "pack": "electron-builder -m"
- ```
+Electron-builder is configured to build for Mac, Windows and Linux. To configure which platform to build for, go into `package.json` and edit the scripts.
+```
+"scripts": {
+  "start": "electron .",
+  "build": "cross-env NODE_ENV=development webpack",
+  "postinstall": "electron-builder install-app-deps",
+  "pack": "electron-builder -mwl"
+},
+```
+In the "pack" script, add append `m`, `w`, or `l` after the `-` to specify which platforms to build for.
+To build for mac only, edit the pack script to:
+```
+"pack": "electron-builder -m"
+```
  
 #### Features we’d like to implement
 
--   Change display for selected nodes
--   Ability to determine and display dependency errors
--   Right side drawer to display node details on click
--   Click on nodes to view component source code
--   Display and update Node version from the GUI
--   Display and update the module type from the GUI
+Please see our `CONTRIBUTING.md` for a detailed list of current bugs and conceptualized new features to implement.
+
+Of course, if you have a new feature which is not on this list, you are also welcome to submit and present it.
 
 ## Built With
  - Electron
