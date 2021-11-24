@@ -39,7 +39,10 @@ const BundleHistory = (props) =>{
 	//create options in the select which MFE Bundle History
 	const options = [];
 	props.bundleHistory.forEach( bundle =>{
-    options.push(<option key={bundle[0].folder} value={bundle[0].folder}>{bundle[0].folder.split('\\').pop()}</option>);
+		let folder = bundle[0].folder;
+		let folderName = folder.split('\\').pop();
+		folderName = folderName.split('/').pop();
+    options.push(<option key={bundle[0].folder} value={bundle[0].folder}>{folderName}</option>);
   });
 
 
