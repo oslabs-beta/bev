@@ -41,6 +41,6 @@ Internal components rendered through `App.jsx` can be found in the components di
   * Only for first party files (no node modules)
   * This should also programmatically update imports in the respective first party files the action is performed on
 * Create a right-hand panel which displays information on the selected Node in the Dependency Chart
-  * <img src="./assets/images/DisplayPanel.png" width="100" height="200">
+  * <img src="./assets/images/DisplayPanel.png" width="130" height="200">
 * If the right-hand display panel is implemented, functionality to edit first party files directly is desirable
 * Implement GitHub Releases

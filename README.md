@@ -44,7 +44,7 @@ git clone https://github.com/oslabs-beta/bev.git
 
 ### Build Steps
  
-1. Install dependencies by using the following command
+1. Install dependencies by using the following command:
   ```
   npm i
   ```
@@ -54,7 +54,7 @@ git clone https://github.com/oslabs-beta/bev.git
   ```
 3. To run the development build, use:
   ```
-  npm run start
+  npm start
   ```
 4. To build the Electron app, use:
   ```
@@ -70,8 +70,8 @@ Electron-builder is configured to build for Mac, Windows and Linux. To configure
   "pack": "electron-builder -mwl"
 },
 ```
-In the "pack" script, add append `m`, `w`, or `l` after the `-` to specify which platforms to build for.
-To build for mac only, edit the pack script to:
+In the `pack` script, append `m`, `w`, or `l` after the `-` to specify which platforms to build for.
+e.g.: To build for mac only, edit the pack script to:
 ```
 "pack": "electron-builder -m"
 ```
@@ -86,10 +86,12 @@ Of course, if you have a new feature which is not on this list, you are also wel
  - Electron
  - React
  - React Router
- - React Flow
  - React Testing Library
  - Dagre
  - Dependency Cruiser
+ - Webpack CLI
+ - React Flow
+ - Jest
 
 ## Contributors
 
