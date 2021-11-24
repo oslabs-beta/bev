@@ -1,6 +1,8 @@
 import React, { PureComponent, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+
+
 const BundleHistory = (props) =>{
   const data = [];
 	const colors = { js: '#ffadad', css: '#ffd6a5', sass: '#fdffb6', ts: '#caffbf',  html: '#9bf6ff', vue: '#a0c4ff', img: '#bdb2ff', svg: '#ffc6ff', jpg: '#bdb2ff', jpeg: '#bdb2ff', png: '#bdb2ff', gif: '#bdb2ff'};
@@ -14,7 +16,11 @@ const BundleHistory = (props) =>{
 
 	
 	for(let version of MFEBundle){
-		const point = {name: version.date, ...version.sizes};
+		const kbSizes= {};
+		for(let key in version.sizes){
+			kbSizes[key] = (version.sizes[key]/1024).toFixed(2);
+		}
+		const point = {name: version.date, ...kbSizes};
 		console.log('POINT IS = ', point);
 		//since bundlehistory lastest version is at index 0, when we graph we want last version to be last in array
 		//hence we use unshift to get the lastest version to be at last index in data array
