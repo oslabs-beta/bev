@@ -8,7 +8,7 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import { LocalNodeComponent, DefaultNodeComponent } from '../node-handling/styling';
 import { mapToElements } from '../node-handling/reposition'
-import Legend from './Legend';
+// import Legend from './Legend';
 import dagre from 'dagre';
 
 // React flow props, independent of Diagram hooks

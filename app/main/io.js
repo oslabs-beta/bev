@@ -90,9 +90,9 @@ exports.watchFiles = ( win ) => {
 exports.generateDependencyObject = (folderArr) =>{
 	const ARRAY_OF_FILES_AND_DIRS_TO_CRUISE = folderArr;
 	const cruiseOptions = {
-		includeOnly: ["src", "assets", "node_modules", "client"],
+		includeOnly: ["src", "assets", "node_modules"],
 		exclude: {
-			// path: ["release", "public", "dist"]
+			path: ["release", "public", "out", "dist", "__tests__"]
 		},
 		doNotFollow: {
 			path: "node_modules",
