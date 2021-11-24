@@ -3,36 +3,32 @@
 
 bev (Bird’s Eye View) is a microservice migration helper and a dependency manager. Developed under tech accelerator, OS Labs, bev is a multi-platform desktop application that allows you to analyze and visualize dependencies. bev alleviates the pain of migrating to microservices.
 
-Download for MacOS, Windows and Linux.
-
 ### Getting Started With bev
 
 We designed bev with simplicity in mind, so all you need to do is select the root directory of your microservice app and press “Analyze Dependencies.” We’ll take it from here! 
 
-<picture here of landing page>
 Click on the "Open Folders" button and select the folder(s) containing your project.
-<picture of file sys dialogue>
+
+![Click on the "Open Folders" button and select the folder(s) containing your project.](https://i.imgur.com/BP6liem.gif)
 
 ## Features
 #### Dependency Visualizer
 
 bev parses through your project’s file structure to generate an interactive dependency graph. The dependency graph is a nice quick way to see how your dependencies *interflamingle*. The blue nodes represent local dependencies whereas the red nodes represent third-party dependencies. The tan nodes always represent the root directory.
 
-<picture here of dep graph>
+Click on any node to see which children components rely on it. 
 
-Click on any node to see which children components rely on it. QUAAAAAAAACK
-
-<animated gif here of the dep graph animations>
+![Dependency Graph](https://i.imgur.com/dmFFTVY.gif)
 
 #### Bundle Sizer
 
 bev also finds and analyzes your bundle files. bev gives you a detailed breakdown of what’s being bundled.
 
-<insert picture of visualizer and breakdown bar>
+![enter image description here](https://i.imgur.com/UDXgfVC.png)
 
 Select the version history of which bundle file to view to see how the bundle has changed since updating dependencies.
 
-<insert picture of bundle version drop down>
+![enter image description here](https://i.imgur.com/jp8CSog.png)
 
 ## How to Contribute
 
