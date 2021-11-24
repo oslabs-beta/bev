@@ -234,7 +234,6 @@ exports.generateBundleInfoObject = async (folders) =>{
 			fs.writeFile(`${filepath}.json` , JSON.stringify(statsArr), 'utf8', ()=>console.log('New stats history appended.'));
 		}
 
-		
 		outputBundleObjectsArray.push(statsArr);
 
 	};

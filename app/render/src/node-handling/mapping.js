@@ -87,8 +87,8 @@ export const mapDepCruiserJSONToReactFlowElements = (input) => {
                 target: String(sources.indexOf(resolved)),
                 arrowHeadType: 'arrowclosed',
                 // animated: handleAnimated(modules[resolved].dependencyType),
-                animated: handleAnimated(dependencyTypes[0], active ?? false),
-                style: handleEdgeStyle(dependencyTypes[0], active ?? false),
+                animated: handleAnimated(dependencyTypes[0]),
+                style: handleEdgeStyle(dependencyTypes[0]),
                 // style: handleEdgeStyle(dependencyTypes[0]),
                 // type: handleEdgeType(dependencyTypes[0]),
             }
