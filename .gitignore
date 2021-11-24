@@ -124,3 +124,6 @@ yarn.lock
 
 # electron builder
 electron-builder.json
+
+# project files
+BEV-project-files/

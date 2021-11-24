@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import ControlPanel from "./ControlPanel";
-import loading from '../stylesheets/hummingbird-loading.gif';
+import loading from '../../assets/hummingbird-loading.gif';
 
 /*
 Implemented react-router based on react-router v6 which introduced braking changes
