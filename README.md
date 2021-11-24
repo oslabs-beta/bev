@@ -36,8 +36,12 @@ Select the version history of which bundle file to view to see how the bundle ha
 
 ## How to Contribute
 
-If you would like to contribute, take a look at the Contributing.md.
-
+If you would like to contribute, clone the repo.
+ 
+```
+ git clone https://github.com/oslabs-beta/bev.git
+```
+ 
 #### Features we’d like to implement
 
 -   Change display for selected nodes
