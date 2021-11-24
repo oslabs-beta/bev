@@ -13,9 +13,8 @@ const exec = util.promisify(require('child_process').exec);
 const notification = require( './notification' );
 
 // Get application directory
-// const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
-const appDir = path.resolve('./BEV-project-files' );
-// const appDir = path.resolve('/BEV-project-files' );
+const appDir = path.resolve( os.homedir(), 'BEV-project-files' );
+//const appDir = path.resolve('./BEV-project-files' );
 
 // Folder json name
 const folderName = 'folders.json';
@@ -361,38 +360,25 @@ exports.modifyDependencyObject = (depCruiserResults, statsResults, folders) => {
 	return depCruiserResults;
 }
 
-exports.saveResultsToHistory = (folders, depResults, bundleResults) => {
-
-	// If json is preexisting
-
-	// If json does not exist yet
-
-	// console.log('folders in io.js', folders)
-	// let i = 0;	
-	// let fileName;
-
-	// const dateTag = new Date().toISOString().slice(0,19).replace('T','').replaceAll(':', '-').replaceAll('-','');
-	// const outputBundleObjectsArrayRAW = [];
-	// for(let folder of folders){
-	// 	fileName = folder.replaceAll(':','');
-	// 	fileName = (fileName.split('').includes('\\')) ? `stats-${fileName.replaceAll('\\','-')}-${dateTag}` : `stats-${fileName.replaceAll('/','-')}-${dateTag}`;
-	// 	console.log("stats-folder.replaceAll('\\','-') :", fileName.replaceAll('\\','-'));
-	// 	console.log('fileName ', fileName);
-	// 	const filepath = path.resolve(appDir, fileName);
-	// 	console.log('filepath: ', filepath);
+// bundleResults -> Array of Objects
+// dependencyResults -> Object
+/*
+| ./Users/toopham/BEV-project-files
+	| home-stats.json
+	| search-stats.json
+	| nav-stats.json
 
 
-	// 	//Read from stats file and store in outputBundleObjectsArray
-	// 	const outputObj = {};
-	// 	const rawStats = fs.readFileSync(`${filepath}.json`);
-	// 	const stats = JSON.parse(rawStats);
-	// 	outputBundleObjectsArrayRAW.push(stats);
-	// 	const {assets, modules} = stats;
-	// 	let totalSize = 0;
 
-
-}
-
-exports.getJSONHistory = (folders) => {
-
+	| home
+		| BEV-project-files
+			| stats.json -->array of stats.json + depedencyResults
+	| search
+		| BEV-project-files
+	| nav
+		| BEV-project-files
+*/
+exports.saveStates = ({bundleResults, dependencyResults}) => {
+	
+	//loop through bundleResults array and save into appropriate folder
 }

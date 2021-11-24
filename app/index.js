@@ -85,33 +85,23 @@ ipcMain.on( 'app:on-folder-open', ( event, folder ) => {
 
 // Listen to analyze dependencies event
 ipcMain.handle( 'app:on-analyze', async ( event, folders ) => {
+	//check for webpack in each folder, alert error to frontend
+	//io.checkWebpack(folders);
 
-  let dependencyResults, bundleResults;
-  // Check if want to generate new JSONs 
-  const generateNew = true; // Pass in app:on-analyze parameter called `generateNew` or something
+	const dependencyResults = io.generateDependencyObject(folders);
 
-  if (generateNew) {
-    try {
-      dependencyResults = io.generateDependencyObject(folders);
-      // Run `webpack --json > stats.json` in the terminal to generate bundle stats
-      bundleResults = await io.generateBundleInfoObject(folders); // Returns an object {bundleStatsRaw: Array, bundleStats, Array}
-      dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw, folders);
+	// Run `webpack --json > stats.json` in the terminal to generate bundle stats
+	const bundleResults = await io.generateBundleInfoObject(folders); // Returns an object {bundleStatsRaw: Array, bundleStats, Array}
+    
 
-      // Save results in JSON history
-      // io.saveResultsToHistory(folders, dependencyResults, bundleResults);
+	// dependencyResults = io.modifyDependencyObject(dependencyResults, bundleResults.bundleStatsRaw);
 
-    } catch(err) {
-      console.log('there was an error in handling dependency analysis\n', err);
-      return {error: true, msg: err};
-    }
-  }
+	console.log('bundleResults', bundleResults);
+	console.log('dependencyResults', dependencyResults);
 
-  // When generateNew is false
-  else {
-    // Get JSON history for the particular file
-    [dependencyResults, bundleResults] = io.getJSONHistory(folders);
-  }
-
-  const output = {dependencyResults: dependencyResults, bundleResults: bundleResults.bundleStats};
-  return output;
+	const output = {dependencyResults: dependencyResults, bundleResults: bundleResults.bundleStats};
+  
+	//destructure bundleResults to save eac bundle stats into each folder
+	io.saveStats(output);
+	return output;
 } );

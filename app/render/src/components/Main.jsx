@@ -16,20 +16,20 @@ const Main = (props) =>{
 
 	return (
 		<>
-			<div className="container">
+			<div className="container" data-testid="container">
 				<div id='uploader' className='app__uploader'>
 					<div className='uploader__button-area'>
-							<button className='uploader__button' id='uploader-button'>Click To Add Folders</button>
+							<button className='uploader__button' id='uploader-button' data-testid='uploader-button'>Click To Add Folders</button>
 							<p><i>(Make sure the uploaded projects contain a webpack config file in their root directories!)</i></p>
 					</div>
 				</div>
-				<div id='folderlist' className='folders'></div>
+				<div id='folderlist' className='folders' data-testid='folder-list'></div>
 				<div id='analyze-button'> </div>
 				<button id='create-project' >Start Project</button>
 				<div id='submit-button-div'>
 					<input type='hidden' id='loading' onClick={()=>setRenderLoader(true)} />
 					<Link to="/controlpanel">
-						<input type="hidden" id="start-project" value="" onClick={(e) => {updateState(e); }} />
+						<input type="hidden" id="start-project" value="" data-testid='trigger-event' onClick={(e) => {updateState(e); }} />
 					</Link>
 				</div>
 				{(renderLoader) ? (<Loading bundleInfo={props.bundleInfo} /> ) : (<> </>) }
@@ -37,6 +37,5 @@ const Main = (props) =>{
 		</>
 	);
 };
-
 
 export default Main;
