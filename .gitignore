@@ -127,3 +127,4 @@ electron-builder.json
 
 # project files
 BEV-project-files/
+bev-generated-stats.json

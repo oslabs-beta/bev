@@ -153,9 +153,7 @@ exports.generateDependencyObject = (folderArr) => {
 
     notification.resultsAdded(folderArr.length);
 
-    fs.writeFile('results.json', JSON.stringify(json), 'utf8', () =>
-      console.log('JSON generated complete')
-    );
+    fs.writeFileSync('results.json', JSON.stringify(json));
   } catch (error) {
     console.error(error);
   }
@@ -181,12 +179,6 @@ exports.generateBundleInfoObject = async (folders) => {
       `webpack --profile --json > bev-generated-stats.json`,
       { cwd: folder }
     );
-
-    if (stderr) {
-      console.log('stderr: ', stderr);
-    } else {
-      console.log('stdout: ', stdout);
-    }
 
     //Read from stats file and store in outputBundleObjectsArray
     const rawStats = fs.readFileSync(statspath);

@@ -20,7 +20,7 @@ This is the folder the application is where webpack will build to.
 As such, the entirety of its contents are in the gitignore.
 
 ### render/js/
-Content intended to communicate with the backend (app/main/) and render content from it to the frontend.
+Content intended to communicate with the backend (`app/main/`) and render content from it to the frontend.
 Though this intent could seem in contradiction with the next section's description, bearing in mind that this is to specifically be an intermediary between front and back end features will help understand its place in this application's architecture.
 
 ### render/src/
@@ -31,11 +31,18 @@ Internal components rendered through `App.jsx` can be found in the components di
 ### The Bounty Board (Bugs)
 * Nodes reposition when selected (position should only change on drag)
 * Cannot unselect a node until it has moved (selecting again, regardless of position, should unselect)
+* Electron application, once built, does not run properly on MacOS (unable to properly store `results.json` due to a filepath issue)
+  * The core of this issue is that the `generateBundleInfo()` function in `io.js` relies on use of the `webpack` CLI to do it's thing
+    * Applications on MacOS will not have access to non-standard CLIs
+    * Webpack can be imported and leveraged directly through Node.js to accomplish the same output, but more research into its configuration is required
 
 ### Features
 * Improved Testing
   * CI/CD which automatically builds and deploys latest to `bev.dev` when all tests pass successfully on any merge to `main`
+* Implement GitHub Releases
 * Improved performance by creating a bash file which pairs down what is currently done by the webpack-cli in `io.js`
+* Identify errant and unused dependencies (first & third party)
+  * Some progress for this has been performed in the `modify-unused-dependencies`
 * Ability to delete Nodes from the dependency graph
 * Drag/Create edges in the dependency graph
   * Only for first party files (no node modules)
@@ -43,4 +50,3 @@ Internal components rendered through `App.jsx` can be found in the components di
 * Create a right-hand panel which displays information on the selected Node in the Dependency Chart
   * <img src="./assets/images/DisplayPanel.png" width="130" height="200">
 * If the right-hand display panel is implemented, functionality to edit first party files directly is desirable
-* Implement GitHub Releases
