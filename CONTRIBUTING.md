@@ -32,6 +32,9 @@ Internal components rendered through `App.jsx` can be found in the components di
 * Nodes reposition when selected (position should only change on drag)
 * Cannot unselect a node until it has moved (selecting again, regardless of position, should unselect)
 * Electron application, once built, does not run properly on MacOS (unable to properly store `results.json` due to a filepath issue)
+  * The core of this issue is that the `generateBundleInfo()` function in `io.js` relies on use of the `webpack` CLI to do it's thing
+    * Applications on MacOS will not have access to non-standard CLIs
+    * Webpack can be imported and leveraged directly through Node.js to accomplish the same output, but more research into its configuration is required
 
 ### Features
 * Improved Testing
